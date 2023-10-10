@@ -6,7 +6,7 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
-import 'package:ircf/fingerprint_screen.dart';
+import 'package:ircf/dashboard.dart';
 import 'package:ircf/widgets/title_bar.dart';
 enum Gender { Male, Female, Other }
 class FillProfile extends StatefulWidget {

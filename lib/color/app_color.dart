@@ -12,6 +12,7 @@ class AppColor {
   static Color borderColor = const Color.fromRGBO(180, 189, 196, 0.4);
   static Color tealColor = const Color.fromRGBO(22, 127, 113, 1);
   static Color hintColor = const Color.fromRGBO(80, 80, 80, 1);
+  static Color activeColor = const Color.fromRGBO(255, 107, 0, 1);
 
 
 }
