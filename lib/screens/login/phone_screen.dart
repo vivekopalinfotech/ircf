@@ -5,7 +5,8 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
-import 'package:ircf/otp_screen.dart';
+import 'package:ircf/screens/login/otp_screen.dart';
+import 'package:ircf/widgets/show_snackbar.dart';
 import 'package:ircf/widgets/title_bar.dart';
 
 class PhoneScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class PhoneScreen extends StatefulWidget {
 }
 
 class _PhoneScreenState extends State<PhoneScreen> {
+  int phoneNumber = 0;
+  String mobile = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +62,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
                   borderRadius: BorderRadius.circular(18)
                 ),
               ),
-              initialCountryCode: 'US',
+              initialCountryCode: 'IN',
               pickerDialogStyle: PickerDialogStyle(backgroundColor: AppColor.secondaryColor,
               countryCodeStyle: GoogleFonts.jost(color: Colors.black),
               countryNameStyle: GoogleFonts.jost(color: Colors.black),
@@ -78,10 +81,13 @@ class _PhoneScreenState extends State<PhoneScreen> {
               )),
 
               onChanged: (phone) {
-                print(phone.completeNumber);
+
+                print(phone.number.length);
+                phoneNumber = phone.number.length;
+                mobile = phone.number.toString();
               },
             ),
-            Container(
+            SizedBox(
               height: 60,width: MediaQuery.of(context).size.width,
 
               child: ElevatedButton(
@@ -96,7 +102,8 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const OtpScreen()));
+                    phoneNumber < 10 ?showSnackBar(context,'Please Enter Valid Phone Number'):
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  OtpScreen(mobile: mobile)));
                   },
 
                   child: Row(

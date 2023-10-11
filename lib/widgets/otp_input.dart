@@ -21,7 +21,7 @@ class OtpInput extends StatelessWidget {
           obscureText: true,
           obscuringCharacter: '*',
           textAlign: TextAlign.center,
-          keyboardType: TextInputType.visiblePassword,
+          keyboardType: TextInputType.number,
           controller: controller,
           style: GoogleFonts.jost(
             color: Colors.black,

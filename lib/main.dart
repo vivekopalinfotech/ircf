@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ircf/color/app_color.dart';
-import 'package:ircf/onboarding_screen.dart';
+import 'package:ircf/screens/login/onboarding_screen.dart';
 
 Future<void> main() async {
 

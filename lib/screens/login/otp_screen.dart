@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
-import 'package:ircf/fill_profile.dart';
+import 'package:ircf/screens/login/fill_profile.dart';
 import 'package:ircf/widgets/otp_input.dart';
 import 'package:ircf/widgets/title_bar.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final mobile;
+  const OtpScreen({super.key, this.mobile});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -19,6 +20,8 @@ class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController _fieldTwo = TextEditingController();
   final TextEditingController _fieldThree = TextEditingController();
   final TextEditingController _fieldFour = TextEditingController();
+
+  String? otp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +69,14 @@ class _OtpScreenState extends State<OtpScreen> {
 
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const FillProfile()));
+                    setState(() {
+                      otp = _fieldOne.text +
+                          _fieldTwo.text +
+                          _fieldThree.text +
+                          _fieldFour.text;
+                    });
+                  otp!.length < 4 ? ""
+                      : Navigator.push(context, MaterialPageRoute(builder: (context) =>  FillProfile(mobile: widget.mobile)));
                   },
 
                   child: Row(

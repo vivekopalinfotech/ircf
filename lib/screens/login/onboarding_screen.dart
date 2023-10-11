@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
-import 'package:ircf/phone_screen.dart';
+import 'package:ircf/screens/login/phone_screen.dart';
 class Onboard{
   final title;
   final subtitle;
@@ -44,7 +44,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Align(
             alignment: Alignment.topRight,
             child: InkWell(
-                onTap: (){},
+              splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PhoneScreen()));
+                },
                 child:  Text('Skip',style: GoogleFonts.jost(
                   color: AppColor.textColor,fontWeight: FontWeight.w500,
                   fontSize: AppConstants.SMALL
