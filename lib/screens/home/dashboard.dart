@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/screens/home/listing_detail.dart';
 import 'package:ircf/screens/home/popular_courses.dart';
 import 'package:ircf/screens/notification/notification.dart';
 import 'package:ircf/widgets/save.dart';
@@ -60,7 +61,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: AppColor.whiteBG,
       body: Padding(
-        padding: const EdgeInsets.only(top: 34,bottom: 20),
+        padding: const EdgeInsets.only(top: 45,bottom: 20),
     child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,17 +177,22 @@ class _DashboardState extends State<Dashboard> {
                   fontWeight: FontWeight.bold,
                   fontSize: AppConstants.LARGE
               ),),
-              Row(
-                children: [
-                  Text('SEE ALL ',
-                    textScaleFactor:1,
-                    style: GoogleFonts.mulish(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.XSMALL
-                  ),),
-                  Icon(Icons.arrow_forward_ios_rounded,size: 14,color: AppColor.primaryColor,)
-                ],
+              InkWell(
+                onTap: (){
+                  pushNewScreen(context, screen: const PopularCourses(),pageTransitionAnimation: PageTransitionAnimation.fade);
+                },
+                child: Row(
+                  children: [
+                    Text('SEE ALL ',
+                      textScaleFactor:1,
+                      style: GoogleFonts.mulish(
+                        color: AppColor.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: AppConstants.XSMALL
+                    ),),
+                    Icon(Icons.arrow_forward_ios_rounded,size: 14,color: AppColor.primaryColor,)
+                  ],
+                ),
               ),
             ],
           ),
@@ -338,7 +344,7 @@ class _DashboardState extends State<Dashboard> {
     for (int i = 0; i < filterCat.length; i++) {
       widgets.add( Card(
         margin: const EdgeInsets.fromLTRB(16, 0, 0, 5),
-        elevation: 4,
+        elevation: 3,
         clipBehavior: Clip.antiAlias,
         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
         color: Colors.white,
@@ -394,17 +400,24 @@ class _DashboardState extends State<Dashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(),
-                    Row(
-                      children: [
-                        Text('VIEW ',
-                          textScaleFactor:1,
-                          style: GoogleFonts.mulish(
-                              color: AppColor.primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppConstants.XSMALL
-                          ),),
-                        Icon(Icons.arrow_forward_ios_rounded,size: 14,color: AppColor.primaryColor,)
-                      ],
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: (){
+                        pushNewScreen(context, screen: const ListingDetail(),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                      },
+                      child: Row(
+                        children: [
+                          Text('VIEW ',
+                            textScaleFactor:1,
+                            style: GoogleFonts.mulish(
+                                color: AppColor.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: AppConstants.XSMALL
+                            ),),
+                          Icon(Icons.arrow_forward_ios_rounded,size: 14,color: AppColor.primaryColor,)
+                        ],
+                      ),
                     )
                     ],
                   )

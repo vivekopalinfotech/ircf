@@ -174,7 +174,9 @@ class _MyCoursesState extends State<MyCourses> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Column(crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
                         child: Text(

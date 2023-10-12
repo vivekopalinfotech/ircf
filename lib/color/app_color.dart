@@ -16,6 +16,7 @@ class AppColor {
   static Color hintColor = const Color.fromRGBO(80, 80, 80, 1);
   static Color activeColor = const Color.fromRGBO(255, 107, 0, 1);
   static Color progressColor = const Color.fromRGBO(252, 203, 64, 1);
+  static Color readTextColor = const Color.fromRGBO(160, 164, 171, 1);
   static Color error = HexColor("#FF3737");
 
 

@@ -49,7 +49,7 @@ class _AllListingsState extends State<AllListings> {
           itemBuilder: (context,index){
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
-          elevation: 4,
+          elevation: 2,
 
           shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide.none),

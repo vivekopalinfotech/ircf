@@ -24,9 +24,9 @@ class _NotificationsState extends State<Notifications> {
       backgroundColor: AppColor.whiteBG,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 45, left: AppConstants.HORIZONTAL_PADDING, right: AppConstants.HORIZONTAL_PADDING, ),
-            child: const TitleBar(title: 'Notifications',),
+          const Padding(
+            padding: EdgeInsets.only(top: 45, left: AppConstants.HORIZONTAL_PADDING, right: AppConstants.HORIZONTAL_PADDING, ),
+            child: TitleBar(title: 'Notifications',),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -49,7 +49,7 @@ class _NotificationsState extends State<Notifications> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: item.length,
                           itemBuilder: (context,index){
-                        return  NotifyCard(icon: item[index].icon,title: item[index].title,subTitle: item[index].subTitle,color: item[index].color,iconColor: item[index].iconColor,);
+                        return NotifyCard(icon: item[index].icon,title: item[index].title,subTitle: item[index].subTitle,color: item[index].color,iconColor: item[index].iconColor,);
                       }),
                           const SizedBox(height: 30,),
                           Text('Yesterday',

@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ircf/color/app_color.dart';
+import 'package:ircf/main_screen.dart';
 import 'package:ircf/screens/login/onboarding_screen.dart';
 
 Future<void> main() async {
@@ -37,8 +38,10 @@ class MyApp extends StatelessWidget {
                 ,
               ),
               themeMode: ThemeMode.system,
-              home: const OnboardingScreen()
-            //const Welcome1(),
+              home:
+              //const OnboardingScreen()
+     const MainScreen(redirectPageName: 'home')
+
           );
 
   }

@@ -49,7 +49,6 @@ class _CertificateState extends State<Certificate> {
         ),
         SizedBox(
           height: 60,width: MediaQuery.of(context).size.width,
-
           child: ElevatedButton(
               style: ButtonStyle(
                   padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 8)),

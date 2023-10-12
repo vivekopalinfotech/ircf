@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/screens/my_courses/my_courses_details.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Ongoing extends StatefulWidget {
   const Ongoing({super.key});
@@ -34,83 +36,88 @@ class _OngoingState extends State<Ongoing> {
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 17),
             itemCount: filterCat.length,
             itemBuilder: (context, index) {
-              return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  elevation: 4,
-                  shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 130,
-                        width: 130,
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(16),
-                              bottomLeft: Radius.circular(16),
-                            ),
-                            color: Colors.black),
-                      ),
-                      Flexible(
-                          child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              filterCat[index].name,
-                              textScaleFactor: 1,
-                              style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              filterCat[index].title,
-                              textScaleFactor: 1,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10, bottom: 14),
-                              child: Text(
-                                ' ${filterCat[index].time}',
-                                style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+              return InkWell(
+                onTap: (){
+                  pushNewScreen(context, screen: const MyCoursesDetail(type: 'Ongoing',),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                },
+                child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    elevation: 2,
+                    shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 130,
+                          width: 130,
+                          decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                bottomLeft: Radius.circular(16),
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const SizedBox(),
-                                Flexible(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(color: AppColor.secondaryColor),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                    child: LinearProgressIndicator(
-                                      backgroundColor: AppColor.whiteBG,
-                                      valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
-                                      value: filterCat[index].value,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 18,
-                                ),
-                                Text(
-                                  '${(filterCat[index].progressValue).round()}/${(filterCat[index].totalValue).round()}',
+                              color: Colors.black),
+                        ),
+                        Flexible(
+                            child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                filterCat[index].name,
+                                textScaleFactor: 1,
+                                style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                filterCat[index].title,
+                                textScaleFactor: 1,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10, bottom: 14),
+                                child: Text(
+                                  ' ${filterCat[index].time}',
                                   style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ))
-                    ],
-                  ));
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SizedBox(),
+                                  Flexible(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(color: AppColor.secondaryColor),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+                                      child: LinearProgressIndicator(
+                                        backgroundColor: AppColor.whiteBG,
+                                        valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
+                                        value: filterCat[index].value,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 18,
+                                  ),
+                                  Text(
+                                    '${(filterCat[index].progressValue).round()}/${(filterCat[index].totalValue).round()}',
+                                    style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                      ],
+                    )),
+              );
             }));
   }
 }
