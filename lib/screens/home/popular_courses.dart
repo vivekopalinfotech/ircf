@@ -287,6 +287,12 @@ class _PopularCoursesState extends State<PopularCourses> {
     _pageController.dispose();
     super.dispose();
   }
+  bool isShow = false;
+  toggle(){
+    setState(() {
+      isShow = !isShow;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -330,10 +336,15 @@ class _PopularCoursesState extends State<PopularCourses> {
                           ),
                           Flexible(
                             flex: 1,
-                            child: SvgPicture.asset(
-                              'assets/images/search.svg',
-                              height: 20,
-                              width: 20,
+                            child: InkWell(
+                              onTap: (){
+                                toggle();
+                              },
+                              child: SvgPicture.asset(
+                                'assets/images/search.svg',
+                                height: 20,
+                                width: 20,
+                              ),
                             ),
                           )
                         ],
@@ -370,8 +381,57 @@ class _PopularCoursesState extends State<PopularCourses> {
 
                       automaticIndicatorColorAdjustment: true,
                       unselectedLabelStyle: GoogleFonts.mulish(color: Colors.black, fontStyle: FontStyle.normal, fontSize: 13, fontWeight: FontWeight.bold),
-                    )
+                    ),
+                    isShow == true?
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 16),
+                      child: Card(
+                        elevation: 2,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:  BorderRadius.all(Radius.circular(12))
+                        ),
+                        margin: EdgeInsets.zero,
+                        color: Colors.white,
+                        child: Container(
+                          height: 60,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
 
+                          child: MediaQuery(
+                            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                            child: TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              controller: searchController,
+                              autofocus: false,
+                              style: GoogleFonts.montserrat(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+                                fontSize: AppConstants.SMALL,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                hintText: 'Search Courses',
+                                hintStyle: GoogleFonts.montserrat(
+                                  color: AppColor.hintColor,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: AppConstants.SMALL,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                prefixIconConstraints: BoxConstraints(
+                                    maxHeight: 20,minWidth: 40),
+
+
+                                prefixIcon: SvgPicture.asset('assets/images/search.svg',height: 20,width: 20,),
+
+                                focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1.0), borderRadius: BorderRadius.all(Radius.circular(12))),
+                                enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent), borderRadius: BorderRadius.all(Radius.circular(30))),
+
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ):SizedBox(height: 16,)
                   ],
                 ),
                 const Expanded(

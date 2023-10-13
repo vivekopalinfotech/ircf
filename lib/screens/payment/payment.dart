@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/screens/home/curriculum.dart';
 import 'package:ircf/widgets/title_bar.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class PaymentMethod extends StatefulWidget {
   const PaymentMethod({super.key});
@@ -102,7 +104,6 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                     color: Colors.white,
 
                                   child: RadioListTile(
-                                    contentPadding: const EdgeInsets.only(bottom: 8),
                                     activeColor: AppColor.activeColor,
                                     controlAffinity: ListTileControlAffinity.trailing,
                                     value: index,
@@ -201,15 +202,22 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                     const SizedBox(
                                       height: 12,
                                     ),
-                                    Text(
-                                      'Watch the Course',
-                                      textScaleFactor: 1,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.jost(
-                                          color: AppColor.activeColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: AppConstants.SMALL,
-                                      decoration: TextDecoration.underline),
+                                    InkWell(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: (){
+                                        pushNewScreen(context, screen: const Curriculum(type:'watch'),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                                      },
+                                      child: Text(
+                                        'Watch the Course',
+                                        textScaleFactor: 1,
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.jost(
+                                            color: AppColor.activeColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: AppConstants.SMALL,
+                                        decoration: TextDecoration.underline),
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 20,
@@ -235,7 +243,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              SizedBox(),
+                                              const SizedBox(),
                                               Center(
                                                 child: Text('E - Receipt',
                                                   textScaleFactor: 1,

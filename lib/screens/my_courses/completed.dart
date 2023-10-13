@@ -42,8 +42,10 @@ class _CompletedState extends State<Completed> {
               return Stack(
                 children: [
                   InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: (){
-                      pushNewScreen(context, screen: MyCoursesDetail(type: 'Completed',),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                      pushNewScreen(context, screen: const MyCoursesDetail(type: 'Completed',),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
                     },
                     child: Card(
                         margin: const EdgeInsets.symmetric(vertical: 10),

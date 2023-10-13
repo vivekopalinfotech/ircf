@@ -142,7 +142,7 @@ class _DashboardState extends State<Dashboard> {
                           width: double.maxFinite,
                           height: 180,
                           child: Image.asset("assets/images/OFFER.png",
-                              fit: BoxFit.contain)),
+                              fit: BoxFit.contain,cacheHeight: 450,cacheWidth:893)),
                       );
                 },
                 itemCount: 5,

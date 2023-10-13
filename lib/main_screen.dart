@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/constants/app_constants.dart';
-import 'package:ircf/screens/about_ircf/about.dart';
+import 'package:ircf/screens/Center/center_screen.dart';
+
 import 'package:ircf/screens/home/dashboard.dart';
 import 'package:ircf/screens/my_courses/my_courses.dart';
 import 'package:ircf/screens/profile/profile.dart';
@@ -36,7 +37,7 @@ class MainScreenState extends State<MainScreen> {
       _controller = PersistentTabController(initialIndex: 0);
     }else if(widget.redirectPageName=="courses"){
       _controller = PersistentTabController(initialIndex: 1);
-    }else if(widget.redirectPageName=="about"){
+    }else if(widget.redirectPageName=="center"){
       _controller = PersistentTabController(initialIndex: 2);
     }else if(widget.redirectPageName=="transaction"){
       _controller = PersistentTabController(initialIndex: 3);
@@ -61,7 +62,7 @@ class MainScreenState extends State<MainScreen> {
     return [
       const Dashboard(),
       const MyCourses(),
-      const About(),
+      const CenterScreen(),
       const Transaction(),
       const Profile(),
     ];
@@ -71,7 +72,8 @@ class MainScreenState extends State<MainScreen> {
     return [
 
       PersistentBottomNavBarItem(
-        icon:  SvgPicture.asset('assets/images/home.svg',color: AppColor.textColor,),
+        inactiveIcon: SvgPicture.asset('assets/images/home.svg',color: AppColor.textColor,),
+        icon:  SvgPicture.asset('assets/images/home.svg',color: AppColor.primaryColor,),
         iconSize: 24,
         title: "HOME",
         textStyle:  GoogleFonts.mulish(fontSize: 9, fontWeight: FontWeight.bold),
@@ -83,14 +85,15 @@ class MainScreenState extends State<MainScreen> {
           routes: {
             '/home': (context) => const Dashboard(),
             '/courses': (context) => const MyCourses(),
-            '/about': (context) => const About(),
+            '/center': (context) => const CenterScreen(),
             '/transaction': (context) => const Transaction(),
             '/profile': (context) => const Profile(),
           },
         ),
       ),
       PersistentBottomNavBarItem(
-        icon:  SvgPicture.asset('assets/images/courses.svg'),
+        inactiveIcon: SvgPicture.asset('assets/images/courses.svg',color: AppColor.textColor,),
+        icon:  SvgPicture.asset('assets/images/courses.svg',color: AppColor.primaryColor,),
         iconSize: 24,
 
         title: "My COURSES",
@@ -103,17 +106,18 @@ class MainScreenState extends State<MainScreen> {
           routes: {
             '/home': (context) => const Dashboard(),
             '/courses': (context) => const MyCourses(),
-            '/about': (context) => const About(),
+            '/center': (context) => const CenterScreen(),
             '/transaction': (context) => const Transaction(),
             '/profile': (context) => const Profile(),
           },
         ),
       ),
       PersistentBottomNavBarItem(
-        icon:  SvgPicture.asset('assets/images/about.svg'),
+        inactiveIcon: SvgPicture.asset('assets/images/about.svg',color: AppColor.textColor,),
+        icon:  SvgPicture.asset('assets/images/about.svg',color: AppColor.primaryColor,),
         iconSize: 24,
 
-        title: "ABOUT IRCF",
+        title: "LOCATE CENTER",
         textStyle:  GoogleFonts.mulish(fontSize: 9, fontWeight: FontWeight.bold),
         activeColorPrimary: AppColor.primaryColor,
         inactiveColorPrimary: AppColor.textColor,
@@ -123,14 +127,15 @@ class MainScreenState extends State<MainScreen> {
           routes: {
             '/home': (context) => const Dashboard(),
             '/courses': (context) => const MyCourses(),
-            '/about': (context) => const About(),
+            '/center': (context) => const CenterScreen(),
             '/transaction': (context) => const Transaction(),
             '/profile': (context) => const Profile(),
           },
         ),
       ),
       PersistentBottomNavBarItem(
-        icon:  SvgPicture.asset('assets/images/transaction.svg'),
+        inactiveIcon: SvgPicture.asset('assets/images/transaction.svg',color: AppColor.textColor,),
+        icon:  SvgPicture.asset('assets/images/transaction.svg',color: AppColor.primaryColor,),
         iconSize: 24,
 
         title: "TRANSACTION",
@@ -143,14 +148,15 @@ class MainScreenState extends State<MainScreen> {
           routes: {
             '/home': (context) => const Dashboard(),
             '/courses': (context) => const MyCourses(),
-            '/about': (context) => const About(),
+            '/center': (context) => const CenterScreen(),
             '/transaction': (context) => const Transaction(),
             '/profile': (context) => const Profile(),
           },
         ),
       ),
       PersistentBottomNavBarItem(
-        icon:  SvgPicture.asset('assets/images/profile.svg'),
+        inactiveIcon: SvgPicture.asset('assets/images/profile.svg',color: AppColor.textColor,),
+        icon:  SvgPicture.asset('assets/images/profile.svg',color: AppColor.primaryColor,),
         iconSize: 24,
 
         title: "PROFILE",
@@ -163,7 +169,7 @@ class MainScreenState extends State<MainScreen> {
           routes: {
             '/home': (context) => const Dashboard(),
             '/courses': (context) => const MyCourses(),
-            '/about': (context) => const About(),
+            '/center': (context) => const CenterScreen(),
             '/transaction': (context) => const Transaction(),
             '/profile': (context) => const Profile(),
           },
@@ -203,48 +209,18 @@ class MainScreenState extends State<MainScreen> {
             return false;
           },
           padding: const NavBarPadding.symmetric(horizontal: 6,vertical: 6),
-          onItemSelected: (index) {
-            //  BlocProvider.of<DashboardCubit>(context).getBanner(widget.latitude,widget.longitude);
-
-
-            if (index == 0) {
-              //  BlocProvider.of<ListingCubit>(context).clearListingState();
-
-              //BlocProvider.of<ListingCubit>(context).listings("", "", "", "", "",
-              //  "", "", latitudeEvent.toString(), longitudeEvent.toString(), false, false, true, "0", "20", "50");
-
-              //   BlocProvider.of<OrderListCubit>(context).getOrderList();
-            }
-            if (index == 1) {
-
-              // BlocProvider.of<ChatUserCubit>(context).chatUserList();
-            }
-            if (index == 2) {
-              //BlocProvider.of<EventCubit>(context).getEvents();
-              //  BlocProvider.of<RidesCubit>(context).rides();
-            }
-            if (index == 3) {
-              //  print('home_screen api call');
-              // BlocProvider.of<HistoryCubit>(context).getHistory();
-            }
-
-            if(index ==4){
-              //BlocProvider.of<YouTubeAllShowsCubit>(context).youtubeAllShows();
-            }
-
-          },
           selectedTabScreenContext: (context) {},
           hideNavigationBar: _hideNavBar,
           decoration: NavBarDecoration(
               colorBehindNavBar: Colors.white,
-              borderRadius: BorderRadius.circular(0.0)
+              borderRadius: BorderRadius.circular(0.0),
+
           ),
           popAllScreensOnTapOfSelectedTab: true,
           itemAnimationProperties: const ItemAnimationProperties(
             duration: Duration(milliseconds: 400),
             curve: Curves.easeIn,
           ),
-
 
           screenTransitionAnimation: const ScreenTransitionAnimation(
             animateTabTransition: true,
@@ -296,16 +272,22 @@ void showAlertDialog(BuildContext context) {
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 16),
       child: Column(
         children: [
-          Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset( "assets/images/New-Vkind-Logo-horizontal-blue.svg",height: 25,)),
-          const SizedBox(height: 16,),
-          Text("Do you want to exit from the application?",
-            textScaleFactor: 1,
-            style: GoogleFonts.montserrat(
-                color: Colors.black,
-                fontSize: AppConstants.LARGE,fontWeight: FontWeight.w500
-            ),),
+        Row(
+          children: [
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Image.asset( "assets/images/logo.png",height: 50,)),
+            const SizedBox(width: 16,),
+            Flexible(
+              child: Text("Do you want to exit from the application?",
+                textScaleFactor: 1,
+                style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontSize: AppConstants.MEDIUM,fontWeight: FontWeight.w500
+                ),),
+            ),
+          ],
+        ),
           const SizedBox(height: 16,),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/screens/home/listing_detail.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Categoryy{
   final name;
@@ -123,17 +125,24 @@ class _ColsState extends State<Cols> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(),
-                                Row(
-                                  children: [
-                                    Text('VIEW ',
-                                      textScaleFactor:1,
-                                      style: GoogleFonts.mulish(
-                                          color: AppColor.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: AppConstants.XSMALL
-                                      ),),
-                                    Icon(Icons.arrow_forward_ios_rounded,size: 14,color: AppColor.primaryColor,)
-                                  ],
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: (){
+                                    pushNewScreen(context, screen: const ListingDetail(),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text('VIEW ',
+                                        textScaleFactor:1,
+                                        style: GoogleFonts.mulish(
+                                            color: AppColor.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: AppConstants.XSMALL
+                                        ),),
+                                      Icon(Icons.arrow_forward_ios_rounded,size: 14,color: AppColor.primaryColor,)
+                                    ],
+                                  ),
                                 )
                               ],
                             )

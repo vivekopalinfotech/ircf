@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/widgets/show_snackbar.dart';
 
 class EReceipt extends StatefulWidget {
   const EReceipt({super.key});
@@ -92,12 +94,12 @@ class _EReceiptState extends State<EReceipt> {
 
                   ),
                 ),
-                SizedBox(height: 35,),
+                const SizedBox(height: 35,),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 44),
+                  padding: const EdgeInsets.symmetric(horizontal: 44),
                   child: ListView.builder(
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: item.length,
 
                     itemBuilder: (context,index){
@@ -119,7 +121,7 @@ class _EReceiptState extends State<EReceipt> {
                            Container(
                              color: AppColor.tealColor,
                              height: 22,
-                             padding: EdgeInsets.symmetric(horizontal: 17,vertical: 4),
+                             padding: const EdgeInsets.symmetric(horizontal: 17,vertical: 4),
                              child: Text(
                                item[index].value,
                                textScaleFactor: 1,
@@ -140,8 +142,14 @@ class _EReceiptState extends State<EReceipt> {
                                          color: AppColor.secondaryTextColor,fontSize: 13,
                                          fontWeight: FontWeight.bold
                                      ),),
-                                   SvgPicture.asset('assets/images/copy.svg',
-                                   height: 16,width: 13.71,),
+                                   InkWell(
+                                     onTap: (){
+                                       showSuccessSnackBar(context, 'Transaction ID copied to clipboard');
+                                       Clipboard.setData(const ClipboardData(text: 'SK345680976' ));
+                                     },
+                                     child: SvgPicture.asset('assets/images/copy.svg',
+                                     height: 16,width: 13.71,),
+                                   ),
                                  ],
                                ):
                            Text(item[index].value,

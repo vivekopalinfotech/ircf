@@ -10,7 +10,8 @@ import 'package:ircf/widgets/title_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Curriculum extends StatefulWidget {
-  const Curriculum({super.key});
+  final type;
+  const Curriculum({super.key, this.type});
 
   @override
   State<Curriculum> createState() => _CurriculumState();
@@ -128,7 +129,9 @@ class _CurriculumState extends State<Curriculum> {
                                       number: item1[index].number,
                                       chapter: item1[index].chapter,
                                       time: item1[index].time,
-                                      icon: 'assets/images/lock.svg',
+                                      icon: widget.type == 'watch'?
+                                      'assets/images/watch.svg'
+                                          :'assets/images/lock.svg',
                                     );
                                   },
                                   separatorBuilder: (BuildContext context, int index) {
@@ -168,7 +171,9 @@ class _CurriculumState extends State<Curriculum> {
                                       number: item2[index].number,
                                       chapter: item2[index].chapter,
                                       time: item2[index].time,
-                                      icon: 'assets/images/lock.svg',
+                                      icon: widget.type == 'watch'?
+                                      'assets/images/watch.svg'
+                                          :'assets/images/lock.svg',
                                     );
                                   },
                                   separatorBuilder: (BuildContext context, int index) {
@@ -188,7 +193,7 @@ class _CurriculumState extends State<Curriculum> {
                   ))
                 ])),
             Positioned(
-              bottom: 20,left: 0,right: 0,
+              bottom: 36,left: 0,right: 0,
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
                 height: 60,

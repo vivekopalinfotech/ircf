@@ -81,7 +81,7 @@ class _ListingDetailState extends State<ListingDetail> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(50),
                                       image: const DecorationImage(
-                                          image: NetworkImage('https://i.pinimg.com/originals/1e/ea/13/1eea135a4738f2a0c06813788620e055.jpg')
+                                          image: NetworkImage('https://i.pinimg.com/originals/1e/ea/13/1eea135a4738f2a0c06813788620e055.jpg',)
                                       )
                                   ),
                                 ),

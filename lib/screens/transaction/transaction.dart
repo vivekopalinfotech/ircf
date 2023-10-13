@@ -31,33 +31,15 @@ class _TransactionState extends State<Transaction> {
             padding: const EdgeInsets.only(
               top: 45,
             ),
-            child: Column(children: [
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 7,
-                      child: Row(
-                        children: [
-                          Text(
-                            ' Transactions',
-                            textScaleFactor: 1,
-                            style: GoogleFonts.jost(color: AppColor.textColor, fontWeight: FontWeight.w500, fontSize: 21),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: SvgPicture.asset(
-                        'assets/images/search.svg',
-                        height: 20,
-                        width: 20,
-                      ),
-                    )
-                  ],
+                child: Text(
+                  ' Transactions',
+                  textScaleFactor: 1,
+                  style: GoogleFonts.jost(color: AppColor.textColor, fontWeight: FontWeight.w500, fontSize: 21),
                 ),
               ),
               const SizedBox(height: 30,),

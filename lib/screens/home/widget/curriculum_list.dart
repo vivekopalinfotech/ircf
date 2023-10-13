@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/screens/my_courses/video_player.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class CurriculumList extends StatefulWidget {
   final number;
@@ -75,7 +77,15 @@ class _CurriculumListState extends State<CurriculumList> {
         ),
         Flexible(
           flex: 1,
-          child: SvgPicture.asset(widget.icon),
+          child: InkWell(
+            splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: (){
+                widget.icon== 'assets/images/lock.svg' ?'':  pushNewScreen(context, screen: VideoPlayerScreen(),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+              },
+              child: SizedBox(
+                  height: 20,width: 20,
+                  child: SvgPicture.asset(widget.icon))),
         )
       ],
     );
