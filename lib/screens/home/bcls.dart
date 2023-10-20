@@ -6,7 +6,6 @@ import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/cubit/course_listing/course_listing_cubit.dart';
 import 'package:ircf/cubit/course_listing/course_listing_state.dart';
-import 'package:ircf/screens/home/dashboard.dart';
 import 'package:ircf/screens/home/listing_detail.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -148,10 +147,10 @@ class _BclsState extends State<Bcls> {
                                         splashColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: (){
-                                          pushNewScreen(context, screen:  ListingDetail(title: state.courseListingResponse.course_detail![index].crs_name.toString(),),withNavBar: false,
-                                              pageTransitionAnimation:
-                                          PageTransitionAnimation
-                                              .fade);
+                                          pushNewScreen(context,
+                                              screen:  ListingDetail(title: state.courseListingResponse.course_detail![index].crs_name.toString(),),
+                                              withNavBar: false,
+                                              pageTransitionAnimation: PageTransitionAnimation.fade);
                                         },
                                         child: Row(
                                           children: [

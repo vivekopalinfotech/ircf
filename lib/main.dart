@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
              ),
 
              themeMode: ThemeMode.system,
-             home: MainScreen(redirectPageName: 'home')
+             home: OnboardingScreen()
          );
        }));
 

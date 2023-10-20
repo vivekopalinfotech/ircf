@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/screens/login/fill_profile.dart';
@@ -20,8 +22,14 @@ class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController _fieldTwo = TextEditingController();
   final TextEditingController _fieldThree = TextEditingController();
   final TextEditingController _fieldFour = TextEditingController();
-
+  final TextEditingController phoneController = TextEditingController();
   String? otp;
+
+  @override
+  void initState() {
+    phoneController.text =  widget.mobile;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +50,46 @@ class _OtpScreenState extends State<OtpScreen> {
                       fontSize: AppConstants.SMALL,fontWeight: FontWeight.bold
                     ),),
                   ),),
+
+                IntlPhoneField(
+                  style: GoogleFonts.jost(color: Colors.black),
+                  dropdownTextStyle: GoogleFonts.jost(color: Colors.black),
+                  dropdownDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  disableLengthCheck: true,
+                  flagsButtonMargin: EdgeInsets.zero,
+                  flagsButtonPadding: const EdgeInsets.all(8),
+                  dropdownIconPosition: IconPosition.trailing,
+                  dropdownIcon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color.fromRGBO(29, 29, 27, 1)),
+                  decoration: InputDecoration(
+                    labelText: phoneController.text.isNotEmpty?'':'Phone Number',
+                    labelStyle: GoogleFonts.jost(color: Colors.black.withOpacity(.50)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
+                  ),
+                  initialCountryCode: 'IN',
+                  pickerDialogStyle: PickerDialogStyle(
+                      backgroundColor: AppColor.secondaryColor,
+                      countryCodeStyle: GoogleFonts.jost(color: Colors.black),
+                      countryNameStyle: GoogleFonts.jost(color: Colors.black),
+                      searchFieldPadding: EdgeInsets.zero,
+                      searchFieldInputDecoration: InputDecoration(
+                        hintStyle: GoogleFonts.jost(
+                          color: Colors.black,
+                        ),
+                        floatingLabelStyle: GoogleFonts.jost(color: Colors.black),
+                        prefixIconColor: Colors.black,
+                        labelStyle: GoogleFonts.jost(color: Colors.black),
+                      )),
+                  controller: phoneController,
+                  onChanged: (phone) {
+                    print(phone.completeNumber);
+
+                  },
+                ),
+                SizedBox(height: 20,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
