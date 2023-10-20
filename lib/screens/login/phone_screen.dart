@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/check_mobile/check_mobile_cubit.dart';
+import 'package:ircf/cubit/check_mobile/check_mobile_state.dart';
+import 'package:ircf/screens/login/fill_profile.dart';
 import 'package:ircf/screens/login/otp_screen.dart';
 import 'package:ircf/widgets/show_snackbar.dart';
 import 'package:ircf/widgets/title_bar.dart';
@@ -23,7 +27,21 @@ class _PhoneScreenState extends State<PhoneScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
      backgroundColor: AppColor.whiteBG,
-      body: Padding(
+      body: BlocConsumer<MobileCubit, CheckMobileState>(listener: (context, state) async {
+      if (state is CheckMobileSuccess) {
+        if(state.mobileResponse.message == "User is not registered with this mobile number."){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => FillProfile(mobile: mobile)));
+        }else{
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  OtpScreen(mobile: mobile)));
+        }
+
+      }
+      if (state is CheckMobileError) {}
+    }, builder: (context, state) {
+        return
+
+
+      Padding(
         padding: const EdgeInsets.only(top: 45,bottom: 32,left: AppConstants.HORIZONTAL_PADDING,right: AppConstants.HORIZONTAL_PADDING),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,6 +80,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
                   borderRadius: BorderRadius.circular(18)
                 ),
               ),
+              disableLengthCheck: true,
               initialCountryCode: 'IN',
               pickerDialogStyle: PickerDialogStyle(backgroundColor: AppColor.secondaryColor,
               countryCodeStyle: GoogleFonts.jost(color: Colors.black),
@@ -102,8 +121,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
                   ),
                   onPressed: (){
-                    phoneNumber < 10 ?showSnackBar(context,'Please Enter Valid Phone Number'):
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  OtpScreen(mobile: mobile)));
+                    BlocProvider.of<MobileCubit>(context).checkMobile(mobile);
                   },
 
                   child: Row(
@@ -134,7 +152,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
             )
           ],
         ),
-      ),
+      );})
     );
   }
 }

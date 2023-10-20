@@ -206,7 +206,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: (){
-                                        pushNewScreen(context, screen: const Curriculum(type:'watch'),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                                        pushNewScreen(context, screen: const Curriculum(type:'watch', courseModule: null,),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
                                       },
                                       child: Text(
                                         'Watch the Course',

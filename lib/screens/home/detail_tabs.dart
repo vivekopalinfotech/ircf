@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/curriculum.dart';
 import 'package:ircf/screens/home/widget/curriculum_list.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -10,7 +11,8 @@ import 'package:readmore/readmore.dart';
 
 class DetailTabs extends StatefulWidget {
   final controller;
-  const DetailTabs({super.key, this.controller});
+  final List<CourseModule>? courseModule;
+  const DetailTabs({super.key, this.controller,this.courseModule});
 
   @override
   State<DetailTabs> createState() => _DetailTabsState();
@@ -101,7 +103,7 @@ class _DetailTabsState extends State<DetailTabs> {
                       ),
                       children: [
                         TextSpan(
-                          text: 'Introduction',
+                          text: widget.courseModule![0].main_module!.module_title.toString(),
                           style: GoogleFonts.jost(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -122,12 +124,12 @@ class _DetailTabsState extends State<DetailTabs> {
 
                 Expanded(
                   child: ListView.separated(
-                    itemCount: item.length,
+                    itemCount: widget.courseModule![0].main_module!.course_videos!.length,
                     shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context,index){
-                      return CurriculumList(number: item[index].number,
-                      chapter: item[index].chapter,time: item[index].time,icon: 'assets/images/watch.svg',);
+                      return CurriculumList(number: widget.courseModule![0].main_module!.course_videos!.length,
+                      chapter: 'Chapter - ${index+1}',time: item[index].time,icon: 'assets/images/watch.svg',);
                   }, separatorBuilder: (BuildContext context, int index) {
                       return Divider(color: AppColor.secondaryColor,
                       height: 48,);

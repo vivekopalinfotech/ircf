@@ -4,13 +4,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/model/course_listing_response.dart';
+import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/curriculum.dart';
 import 'package:ircf/screens/home/detail_tabs.dart';
 import 'package:ircf/screens/home/widget/detail_widget.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class ListingDetail extends StatefulWidget {
-  const ListingDetail({super.key});
+  final title;
+  final List<CourseModule>? courseModule;
+  final List<CourseDetail>? course_detail;
+  final type;
+  const ListingDetail({super.key, this.title, this.courseModule, this.type, this.course_detail});
 
   @override
   State<ListingDetail> createState() => _ListingDetailState();
@@ -156,7 +162,7 @@ class _ListingDetailState extends State<ListingDetail> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('COLS',
+                                      Text(widget.title,
                                         textScaleFactor: 1,
                                         style: GoogleFonts.mulish(
                                           color: AppColor.activeColor,fontSize: AppConstants.XSMALL,
@@ -211,7 +217,7 @@ class _ListingDetailState extends State<ListingDetail> {
                                     ],
                                   ),
                                 ),
-                                DetailTabs(controller: tabController,)
+                                DetailTabs(controller: tabController,courseModule: widget.courseModule,)
                               ],
                             ),
                           ],
@@ -261,14 +267,14 @@ class _ListingDetailState extends State<ListingDetail> {
 
               ),
               onPressed: (){
-                  pushNewScreen(context, screen: const Curriculum(),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                  pushNewScreen(context, screen:  Curriculum(courseModule: widget.courseModule,),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(width: 48,),
                   Center(
-                    child: Text('Enroll Course - \$${55}',
+                    child: Text('Enroll Course - \$${0}',
                       textScaleFactor: 1,
                       style: GoogleFonts.jost(
                           color: Colors.white,

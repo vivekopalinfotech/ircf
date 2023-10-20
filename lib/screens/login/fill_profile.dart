@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,8 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/login/login_cubit.dart';
+import 'package:ircf/cubit/login/login_state.dart';
 import 'package:ircf/screens/home/dashboard.dart';
 import 'package:ircf/main_screen.dart';
 import 'package:ircf/utils/app_utils.dart';
@@ -46,7 +49,76 @@ class _FillProfileState extends State<FillProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteBG,
-      body: Padding(
+      body:
+      BlocConsumer<LoginCubit, LoginState>(listener: (context, state) async {
+        if (state is LoginSuccess) {
+          phoneController.text.isNotEmpty && fullNameController.text.isNotEmpty &&
+              dobController.text.isNotEmpty && emailController.text.isNotEmpty?
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  const MainScreen(redirectPageName: 'home',))):showSnackBar(context, 'Please Enter details');
+
+        }
+        if (state is LoginError) {
+
+          showSnackBar(context, state.message);
+        }
+        if(state is LoginLoading){
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+            insetPadding: const EdgeInsets.symmetric(vertical: 70, horizontal: 16),
+            contentPadding: EdgeInsets.zero,
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(36), borderSide: BorderSide.none),
+            backgroundColor: Colors.white,
+            content: Container(
+                height: 460,
+                width: 360,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(36), color: Colors.white, image: const DecorationImage(image: AssetImage('assets/images/PROCESS.png'))),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 62),
+                        child: Image.asset(
+                          'assets/images/success_profile.png',
+                          height: 153,
+                          width: 153,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        'Congratulations',
+                        style: GoogleFonts.jost(color: AppColor.textColor, fontWeight: FontWeight.w500, fontSize: AppConstants.XXLARGE),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Text(
+                          'Your Account is Ready to Use. You will be redirected to the Home Page in a Few Seconds.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.mulish(color: AppColor.secondaryTextColor, fontWeight: FontWeight.bold, fontSize: AppConstants.SMALL),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      CupertinoActivityIndicator(
+                        color: AppColor.textColor,
+                        radius: 20,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
+          ));
+        }
+      }, builder: (context, state) {
+     return Padding(
         padding: const EdgeInsets.only(top: 45, bottom: 32, left: AppConstants.HORIZONTAL_PADDING, right: AppConstants.HORIZONTAL_PADDING),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -288,7 +360,7 @@ class _FillProfileState extends State<FillProfile> {
                       dropdownDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      disableLengthCheck: false,
+                      disableLengthCheck: true,
                       flagsButtonMargin: EdgeInsets.zero,
                       flagsButtonPadding: const EdgeInsets.all(8),
                       dropdownIconPosition: IconPosition.trailing,
@@ -319,6 +391,9 @@ class _FillProfileState extends State<FillProfile> {
                         print(phone.completeNumber);
 
                       },
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     Container(
                       height: 60,
@@ -372,68 +447,10 @@ class _FillProfileState extends State<FillProfile> {
                         ),
                       )),
                   onPressed: () {
-                    phoneController.text.isNotEmpty && fullNameController.text.isNotEmpty &&
-                        dobController.text.isNotEmpty && emailController.text.isNotEmpty?
-                    
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              insetPadding: const EdgeInsets.symmetric(vertical: 70, horizontal: 16),
-                              contentPadding: EdgeInsets.zero,
-                              shape: OutlineInputBorder(borderRadius: BorderRadius.circular(36), borderSide: BorderSide.none),
-                              backgroundColor: Colors.white,
-                              content: InkWell(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) =>  const MainScreen(redirectPageName: 'home',)));
-                                },
-                                child: Container(
-                                  height: 460,
-                                  width: 360,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(36), color: Colors.white, image: const DecorationImage(image: AssetImage('assets/images/PROCESS.png'))),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 62),
-                                          child: Image.asset(
-                                            'assets/images/success_profile.png',
-                                            height: 153,
-                                            width: 153,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 30,
-                                        ),
-                                        Text(
-                                          'Congratulations',
-                                          style: GoogleFonts.jost(color: AppColor.textColor, fontWeight: FontWeight.w500, fontSize: AppConstants.XXLARGE),
-                                        ),
-                                        const SizedBox(
-                                          height: 12,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                                          child: Text(
-                                            'Your Account is Ready to Use. You will be redirected to the Home Page in a Few Seconds.',
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.mulish(color: AppColor.secondaryTextColor, fontWeight: FontWeight.bold, fontSize: AppConstants.SMALL),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 25,
-                                        ),
-                                        CupertinoActivityIndicator(
-                                          color: AppColor.textColor,
-                                          radius: 20,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )):showSnackBar(context, 'Please Enter details');
+                    BlocProvider.of<LoginCubit>(context).register(fullNameController.text,
+                      nickNameController.text,AppUtils.convertDate(selectedDate.toString()),emailController.text,phoneController.text,genderController.text,'',
+                      '','','','','',''
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -466,8 +483,9 @@ class _FillProfileState extends State<FillProfile> {
             )
           ],
         ),
-      ),
-    );
+      );
+    }
+    ));
   }
 
   _getFromGallery() async {

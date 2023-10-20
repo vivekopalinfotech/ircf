@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/course_listing/course_listing_cubit.dart';
+import 'package:ircf/cubit/course_listing/course_listing_state.dart';
 import 'package:ircf/screens/home/listing_detail.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -17,7 +20,9 @@ class Categoryy{
   Categoryy(this.name, this.title, this.isSaved,this.disPrice, this.price );
 }
 class Cols extends StatefulWidget {
-  const Cols({super.key});
+  final name;
+  final slug;
+  const Cols({super.key, this.name, this.slug});
 
   @override
   State<Cols> createState() => _ColsState();
@@ -36,17 +41,29 @@ class _ColsState extends State<Cols> {
 
   ];
   @override
+  void initState() {
+    BlocProvider.of<CourseListingCubit>(context).courseListing(widget.slug);
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColor.whiteBG,
-        body: ListView.builder(
-            itemCount: filterCat.length,
+        body:
+        BlocConsumer<CourseListingCubit, CourseListingState>(listener: (context, state) async {
+
+          if (state is CourseListingSuccess) {}
+          if (state is CourseListingError) {}
+        }, builder: (context, state) {
+          if (state is CourseListingSuccess) {
+            return
+        ListView.builder(
+            itemCount: state.courseListingResponse.course_detail!.length,
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 17),
             itemBuilder: (context,index){
               return Card(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   elevation: 2,
-
                   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none),
                   color: Colors.white,
@@ -70,7 +87,7 @@ class _ColsState extends State<Cols> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(filterCat[index].name,
+                                Text(state.courseListingResponse.course_detail![index].crs_name.toString(),
                                   textScaleFactor: 1,
                                   style: GoogleFonts.mulish(
                                       fontSize: AppConstants.XSMALL,
@@ -89,7 +106,7 @@ class _ColsState extends State<Cols> {
                             ),
                             const SizedBox(height: 10,),
                             Text(
-                              filterCat[index].title,
+                              state.courseListingResponse.course_detail![index].crs_short_name.toString(),
                               textScaleFactor: 1,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -102,7 +119,7 @@ class _ColsState extends State<Cols> {
                             RichText(
                                 textScaleFactor: 1,
                                 text: TextSpan(
-                                    text: '${filterCat[index].disPrice} ',
+                                    text: '${0} ',
                                     style: GoogleFonts.mulish(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -110,7 +127,7 @@ class _ColsState extends State<Cols> {
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: filterCat[index].price,
+                                        text: '0',
                                         style: GoogleFonts.mulish(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
@@ -152,7 +169,10 @@ class _ColsState extends State<Cols> {
                     ],
                   )
               );
-            })
+            });}
+  return Center(
+  child: CircularProgressIndicator());
+})
     );
   }
 }

@@ -36,7 +36,7 @@ class _CurriculumListState extends State<CurriculumList> {
                       color: AppColor.cardColor
                   ),
                   child: Center(
-                    child: Text(widget.number,
+                    child: Text(widget.number.toString(),
                       style: GoogleFonts.jost(
                           fontWeight: FontWeight.w500,
                           fontSize: AppConstants.SMALL,
