@@ -5,22 +5,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/course_category/course_category_cubit.dart';
+import 'package:ircf/cubit/course_category/course_category_state.dart';
 import 'package:ircf/cubit/course_module/course_module_cubit.dart';
 import 'package:ircf/cubit/course_module/course_module_state.dart';
+import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/listing_detail.dart';
 import 'package:ircf/screens/home/popular_courses.dart';
 import 'package:ircf/screens/notification/notification.dart';
+import 'package:ircf/utils/preferences_data.dart';
 import 'package:ircf/widgets/save.dart';
-import 'package:ircf/widgets/title_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-
-class Cat {
-  final name;
-  final title;
-  final isSaved;
-
-  Cat(this.name, this.title, this.isSaved);
-}
 
 class Dashboard extends StatefulWidget {
   final name;
@@ -34,10 +29,12 @@ class _DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
   late PageController _pageController;
   String activePageIndex = '';
-
+  var name;
   @override
   void initState() {
     _pageController = PageController();
+
+    BlocProvider.of<CourseCategoryCubit>(context).courseCategory();
     BlocProvider.of<CourseModuleCubit>(context).courseModule();
     super.initState();
   }
@@ -48,11 +45,6 @@ class _DashboardState extends State<Dashboard> {
     super.dispose();
   }
 
-  List<Cat> filterCat = [
-    Cat('COLS', 'Compression-Only Life Support', false),
-    Cat('BCLS', 'Basic Cardiopulmonary Life Support ', true),
-    Cat('CCLS', 'Comprehensive Cardiopulmonary Life Support', false),
-  ];
   bool isSaved = false;
 
   toggelButton() async {
@@ -61,10 +53,19 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-
+  List<String> img = [
+    'assets/images/home_banner-1.png',
+    'assets/images/home_banner2.png',
+    'assets/images/home_banner3.png',
+  ];
 
   @override
   Widget build(BuildContext context) {
+    PreferenceData.getData('user_name').then((value) {
+      setState(() {
+        name = value.toString();
+      });
+    });
     return Scaffold(
       backgroundColor: AppColor.whiteBG,
       body: Padding(
@@ -83,7 +84,7 @@ class _DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hi, OPAL INFOTECH',
+                            'Hi, $name',
                             maxLines: 1,
                             textScaleFactor: 1,
                             overflow: TextOverflow.ellipsis,
@@ -150,22 +151,22 @@ class _DashboardState extends State<Dashboard> {
                               margin: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING, vertical: 0),
                               width: double.maxFinite,
                               height: 180,
-                              child: Image.asset("assets/images/OFFER.png", fit: BoxFit.contain, cacheHeight: 450, cacheWidth: 893)),
+                              child: Image.asset(img[index], fit: BoxFit.contain, cacheHeight: 450, cacheWidth: 893)),
                         );
                       },
-                      itemCount: 5,
+                      itemCount: img.length,
                     ),
                   ),
                   Positioned(
                     left: 0,
                     right: 0,
-                    bottom: 14,
+                    bottom: 10,
                     child: SizedBox(
                       height: 16,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
-                          5,
+                          img.length,
                           (index) => 5 > 1 ? buildDot(index, context) : const SizedBox(),
                         ),
                       ),
@@ -212,13 +213,21 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
-                child: SizedBox(
-                  height: 54,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _getListData()),
-                ),
-              ),
+              BlocConsumer<CourseCategoryCubit, CourseCategoryState>(listener: (context, state) async {
+                if (state is CourseCategorySuccess) {}
+                if (state is CourseCategoryError) {}
+              }, builder: (context, state) {
+                if (state is CourseCategorySuccess) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
+                    child: SizedBox(
+                      height: 54,
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _getListData(state.categoryResponse.course_category!)),
+                    ),
+                  );
+                }
+                return AppConstants.LOADER;
+              }),
               const SizedBox(
                 height: 18,
               ),
@@ -260,10 +269,15 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 18,
               ),
-              SizedBox(
-                height: 250,
-                child: ListView(scrollDirection: Axis.horizontal, children: _getCards()),
-              ),
+              BlocConsumer<CourseModuleCubit, CourseModuleState>(listener: (context, state) async {
+                if (state is CourseModuleSuccess) {}
+                if (state is CourseModuleError) {}
+              }, builder: (context, state) {
+                if (state is CourseModuleSuccess) {
+                  return SizedBox(height: 250, child: ListView(scrollDirection: Axis.horizontal, children: _getCards(state.courseModuleResponse)));
+                }
+                return AppConstants.LOADER;
+              }),
               const SizedBox(
                 height: 40,
               ),
@@ -303,10 +317,10 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _getListData() {
+  _getListData(category) {
     List<Widget> widgets = [];
 
-    for (int i = 0; i < filterCat.length; i++) {
+    for (int i = 0; i < category.length; i++) {
       widgets.add(Container(
         height: 30,
         padding: EdgeInsets.zero,
@@ -315,18 +329,18 @@ class _DashboardState extends State<Dashboard> {
           highlightColor: Colors.transparent,
           onTap: () {
             setState(() {
-              activePageIndex = filterCat[i].name;
+              activePageIndex = category[i].cat_name;
             });
           },
           child: Chip(
             label: Text(
-              filterCat[i].name,
+              category[i].cat_name,
               textAlign: TextAlign.center,
               textScaleFactor: 1,
-              style: GoogleFonts.mulish(color: activePageIndex == filterCat[i].name ? Colors.white : Colors.black, fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold),
+              style: GoogleFonts.mulish(color: activePageIndex == category[i].cat_name ? Colors.white : Colors.black, fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold),
             ),
             labelPadding: const EdgeInsets.all(0.0),
-            backgroundColor: activePageIndex == filterCat[i].name ? AppColor.primaryColor : AppColor.secondaryColor,
+            backgroundColor: activePageIndex == category[i].cat_name ? AppColor.primaryColor : AppColor.secondaryColor,
             elevation: 0.0,
             padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 7),
           ),
@@ -336,7 +350,9 @@ class _DashboardState extends State<Dashboard> {
     return widgets;
   }
 
-  _getCards() {
+  _getCards(
+    CourseModuleResponse? courseModuleResponse,
+  ) {
     List<Widget> widgets = [];
     widgets.add(
       Card(
@@ -347,7 +363,7 @@ class _DashboardState extends State<Dashboard> {
           color: Colors.white,
           child: Container()),
     );
-    for (int i = 0; i < filterCat.length; i++) {
+    for (int i = 0; i < 2; i++) {
       widgets.add(
         Card(
           margin: const EdgeInsets.fromLTRB(16, 0, 0, 5),
@@ -386,14 +402,14 @@ class _DashboardState extends State<Dashboard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              state.courseModuleResponse.course!.crs_name.toString(),
+                              courseModuleResponse!.course!.crs_name.toString(),
                               textScaleFactor: 1,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
                             ),
                             SaveWidget(
-                              favdata: filterCat[i].isSaved,
+                              favdata: false,
                             )
                           ],
                         ),
@@ -401,7 +417,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 7,
                         ),
                         Text(
-                          filterCat[i].title,
+                          courseModuleResponse.course!.crs_short_name.toString(),
                           textScaleFactor: 1,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -418,10 +434,10 @@ class _DashboardState extends State<Dashboard> {
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () {
-                                pushNewScreen(context, screen:  ListingDetail(courseModule: state.courseModuleResponse.course_module!,title: state.courseModuleResponse.course!.crs_name),
+                                pushNewScreen(context,
+                                    screen: ListingDetail(courseModule: state.courseModuleResponse.course_module!, title: state.courseModuleResponse.course!.crs_name),
                                     withNavBar: false,
-                                    pageTransitionAnimation:
-                                PageTransitionAnimation.fade);
+                                    pageTransitionAnimation: PageTransitionAnimation.fade);
                               },
                               child: Row(
                                 children: [
@@ -444,8 +460,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   );
                 }
-                return Center(
-                    child: CircularProgressIndicator());
+                return AppConstants.LOADER;
               }),
             ],
           ),

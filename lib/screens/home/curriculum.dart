@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/model/all_listing_response.dart';
+import 'package:ircf/model/course_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/detail_tabs.dart';
 import 'package:ircf/screens/home/widget/curriculum_list.dart';
@@ -13,30 +15,16 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 class Curriculum extends StatefulWidget {
   final type;
   final List<CourseModule>? courseModule;
-  const Curriculum({super.key, this.type, required this.courseModule});
+  final List<CourseDetail>? courseDetail;
+  final List<Course>? course;
+  const Curriculum({super.key, this.type, required this.courseModule, this.courseDetail, this.course});
 
   @override
   State<Curriculum> createState() => _CurriculumState();
 }
 
 class _CurriculumState extends State<Curriculum> {
-  List<Curriculcum> item = [
-    Curriculcum('01', 'Chapter - 1', '15 Mins'),
-    Curriculcum('02', 'Chapter - 2', '10 Mins'),
-  ];
 
-  List<Curriculcum> item1 = [
-    Curriculcum('03', 'Chapter - 1', '08 Mins'),
-    Curriculcum('04', 'Chapter - 2', '25 Mins'),
-    Curriculcum('05', 'Chapter - 2', '12 Mins'),
-    Curriculcum('06', 'Chapter - 2', '10 Mins'),
-  ];
-
-  List<Curriculcum> item2 = [
-    Curriculcum('07', 'Chapter - 1', '15 Mins'),
-    Curriculcum('08', 'Chapter - 2', '30 Mins'),
-    Curriculcum('09', 'Chapter - 2', '42 Mins'),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +51,8 @@ class _CurriculumState extends State<Curriculum> {
                         child: Padding(
                             padding: const EdgeInsets.all(25),
                             child: ListView.separated(
-                              itemCount: widget.courseModule!.length,
+                              itemCount:    widget.type == 'category'   ?
+                              widget.courseDetail!.length:  widget.type == 'all'   ?widget.course!.length:widget.courseModule!.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
@@ -80,7 +69,7 @@ class _CurriculumState extends State<Curriculum> {
                                             overflow: TextOverflow.ellipsis,
                                             text: TextSpan(text: 'Section ${index+1} - ', style: GoogleFonts.jost(fontSize: 15, fontWeight: FontWeight.w500, color: AppColor.textColor), children: [
                                               TextSpan(
-                                                text: widget.courseModule![index].main_module!.module_title,
+                                                text:   widget.type == 'category'   ? widget.courseDetail![index].crs_name:widget.type == 'all'   ?widget.course![index].crs_name:widget.courseModule![index].main_module!.module_title,
                                                 style: GoogleFonts.jost(fontSize: 15, fontWeight: FontWeight.w500, color: AppColor.primaryColor),
                                               )
                                             ]))),
@@ -90,15 +79,16 @@ class _CurriculumState extends State<Curriculum> {
                                         )
                                       ],
                                     ),
+                                    const SizedBox(height: 8,),
                                     ListView.separated(
-                                      itemCount: widget.courseModule![index].main_module!.course_videos!.length,
+                                      itemCount:  widget.type == 'category'   ?1:widget.type == 'all'   ?1:widget.courseModule![index].main_module!.course_videos!.length,
                                       shrinkWrap: true,
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return CurriculumList(
                                           number: index+1,
                                           chapter: 'Chapter - ${index+1}',
-                                          time: item[index].time,
+                                          time: '25 mins',
                                           icon: 'assets/images/watch.svg',
                                         );
                                       },
@@ -113,7 +103,9 @@ class _CurriculumState extends State<Curriculum> {
                                 );
                               },
                               separatorBuilder: (BuildContext context, int index) {
-                                return Divider();
+                                return Divider(
+                                  height: 32,
+                                );
                               },
                             )),
                       ),

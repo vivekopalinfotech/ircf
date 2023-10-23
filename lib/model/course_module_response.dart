@@ -1,7 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 class CourseModuleResponse {
   final int? code;
   final bool? success;
-  final Course? course;
+  final Coursse? course;
   final List<CourseModule>? course_module;
 
   CourseModuleResponse({
@@ -14,7 +16,7 @@ class CourseModuleResponse {
   CourseModuleResponse.fromJson(Map<String, dynamic> json)
       : code = json['code'] as int?,
         success = json['success'] as bool?,
-        course = (json['course'] as Map<String,dynamic>?) != null ? Course.fromJson(json['course'] as Map<String,dynamic>) : null,
+        course = (json['course'] as Map<String,dynamic>?) != null ? Coursse.fromJson(json['course'] as Map<String,dynamic>) : null,
         course_module = (json['course_module'] as List?)
             ?.map((dynamic e) => CourseModule.fromJson(e as Map<String, dynamic>))
             .toList();
@@ -27,30 +29,46 @@ class CourseModuleResponse {
   };
 }
 
-class Course {
+class Coursse {
 
   final int? crs_id;
   final String? crs_name;
   final String? crs_short_name;
+  final String? crs_amount;
+  final String? crs_category;
+  final String? crs_type;
+  final String? crs_image;
 
 
-  Course({
+  Coursse({
 
     this.crs_id,
     this.crs_name,
     this.crs_short_name,
+    this.crs_amount,
+    this.crs_category,
+    this.crs_type,
+    this.crs_image,
   });
 
-  Course.fromJson(Map<String, dynamic> json)
+  Coursse.fromJson(Map<String, dynamic> json)
       :
         crs_id = json['crs_id'] as int?,
         crs_name = json['crs_name'] as String?,
-        crs_short_name = json['crs_short_name'] as String?;
+        crs_short_name = json['crs_short_name'] as String?,
+        crs_amount = json['crs_amount'] as String?,
+        crs_category = json['crs_category'].toString(),
+        crs_type = json['crs_type'].toString(),
+        crs_image = json['crs_image'].toString();
 
   Map<String, dynamic> toJson() => {
     'crs_id' : crs_id,
     'crs_name' : crs_name,
-    'crs_short_name' : crs_short_name
+    'crs_short_name' : crs_short_name,
+    'crs_amount' : crs_amount,
+    'crs_category' : crs_category,
+    'crs_type ' : crs_type,
+    'crs_image ' : crs_image,
   };
 }
 

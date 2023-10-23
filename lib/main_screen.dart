@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/main.dart';
 import 'package:ircf/screens/Center/center_screen.dart';
 
 import 'package:ircf/screens/home/dashboard.dart';
 import 'package:ircf/screens/my_courses/my_courses.dart';
 import 'package:ircf/screens/profile/profile.dart';
 import 'package:ircf/screens/transaction/transaction.dart';
+import 'package:ircf/utils/preferences_data.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import '../../../color/app_color.dart';
 
@@ -51,11 +53,25 @@ class MainScreenState extends State<MainScreen> {
     }*/
 
     _hideNavBar = false;
-
+    _callSplashScreen();
 
   }
 
+  _callSplashScreen() async {
 
+    PreferenceData.getData('login').then((value) {
+      setState(() {
+        login = value.toString();
+
+      });
+    });
+    PreferenceData.getData('token').then((value) {
+      setState(() {
+        token = value.toString();
+      });
+    });
+
+  }
   List<Widget> _buildScreens() {
     return [
       const Dashboard(),

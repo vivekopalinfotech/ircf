@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/model/all_listing_response.dart';
 import 'package:ircf/model/course_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/curriculum.dart';
@@ -14,9 +15,10 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 class ListingDetail extends StatefulWidget {
   final title;
   final List<CourseModule>? courseModule;
-  final List<CourseDetail>? course_detail;
+  final List<CourseDetail>? courseDetail;
+  final List<Course>? course;
   final type;
-  const ListingDetail({super.key, this.title, this.courseModule, this.type, this.course_detail});
+  const ListingDetail({super.key, this.title, this.courseModule, this.type, this.courseDetail, this.course});
 
   @override
   State<ListingDetail> createState() => _ListingDetailState();
@@ -217,7 +219,7 @@ class _ListingDetailState extends State<ListingDetail> {
                                     ],
                                   ),
                                 ),
-                                DetailTabs(controller: tabController,courseModule: widget.courseModule,)
+                                DetailTabs(controller: tabController,courseModule: widget.courseModule,courseDetail:widget.courseDetail,type: widget.type,course: widget.course,)
                               ],
                             ),
                           ],
@@ -267,7 +269,7 @@ class _ListingDetailState extends State<ListingDetail> {
 
               ),
               onPressed: (){
-                  pushNewScreen(context, screen:  Curriculum(courseModule: widget.courseModule,),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                  pushNewScreen(context, screen:  Curriculum(courseModule: widget.courseModule,courseDetail:widget.courseDetail,type: widget.type,course: widget.course,),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

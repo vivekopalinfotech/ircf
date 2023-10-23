@@ -9,26 +9,17 @@ import 'package:ircf/cubit/course_listing/course_listing_state.dart';
 import 'package:ircf/screens/home/listing_detail.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-class Categoryy{
-  final name;
-  final title;
-  final isSaved;
-  final disPrice;
-  final price;
 
-
-  Categoryy(this.name, this.title, this.isSaved,this.disPrice, this.price );
-}
-class Cols extends StatefulWidget {
+class CourseCategory extends StatefulWidget {
   final name;
   final slug;
-  const Cols({super.key, this.name, this.slug});
+  const CourseCategory({super.key, this.name, this.slug});
 
   @override
-  State<Cols> createState() => _ColsState();
+  State<CourseCategory> createState() => _CourseCategoryState();
 }
 
-class _ColsState extends State<Cols> {
+class _CourseCategoryState extends State<CourseCategory> {
   bool isSaved = false;
 
   toggelButton() async {
@@ -36,10 +27,7 @@ class _ColsState extends State<Cols> {
       isSaved = !isSaved;
     });
   }
-  List<Categoryy> filterCat = [
-    Categoryy('COLS','Compression-Only Life Support',true,'\$${28}','\$${42}'),
 
-  ];
   @override
   void initState() {
     BlocProvider.of<CourseListingCubit>(context).courseListing(widget.slug);
@@ -61,7 +49,9 @@ class _ColsState extends State<Cols> {
             itemCount: state.courseListingResponse.course_detail!.length,
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 17),
             itemBuilder: (context,index){
-              return Card(
+              return
+                state.courseListingResponse.course_detail!.isNotEmpty?
+                Card(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   elevation: 2,
                   shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16),
@@ -87,26 +77,29 @@ class _ColsState extends State<Cols> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(state.courseListingResponse.course_detail![index].crs_name.toString(),
-                                  textScaleFactor: 1,
-                                  style: GoogleFonts.mulish(
-                                      fontSize: AppConstants.XSMALL,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.activeColor
-                                  ),),
+                                Flexible(
+                                  child: Text(state.courseListingResponse.course_detail![index].crs_short_name.toString(),
+                                    textScaleFactor: 1,  maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.mulish(
+                                        fontSize: AppConstants.XSMALL,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.activeColor
+                                    ),),
+                                ),
                                 InkWell(
                                     onTap: (){
                                       toggelButton();
                                     },
                                     child:
-                                    filterCat[index].isSaved == false?
+                                    isSaved == false?
                                     SvgPicture.asset('assets/images/save.svg',height: 18,width: 15,):
                                     SvgPicture.asset('assets/images/saved.svg',height: 18,width: 15,))
                               ],
                             ),
                             const SizedBox(height: 10,),
                             Text(
-                              state.courseListingResponse.course_detail![index].crs_short_name.toString(),
+                              state.courseListingResponse.course_detail![index].crs_name.toString(),
                               textScaleFactor: 1,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -146,7 +139,7 @@ class _ColsState extends State<Cols> {
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: (){
-                                    pushNewScreen(context, screen: const ListingDetail(),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                                    pushNewScreen(context, screen:  ListingDetail(title: state.courseListingResponse.course_detail![index].crs_short_name.toString(),type:'category',courseDetail: state.courseListingResponse.course_detail!),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
                                   },
                                   child: Row(
                                     children: [
@@ -168,10 +161,9 @@ class _ColsState extends State<Cols> {
                       ))
                     ],
                   )
-              );
+              ):SizedBox();
             });}
-  return Center(
-  child: CircularProgressIndicator());
+  return AppConstants.LOADER;
 })
     );
   }

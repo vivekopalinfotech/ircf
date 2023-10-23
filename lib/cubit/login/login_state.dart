@@ -1,4 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/cupertino.dart';
+import 'package:ircf/model/user_response.dart';
 
 
 
@@ -8,17 +11,11 @@ abstract class LoginState {}
 class LoginInitial extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  final String msg;
+  final UserResponse userResponse;
 
-  LoginSuccess(this.msg);
+  LoginSuccess(this.userResponse);
 }
 
-class ResendLoginSuccess extends LoginState {
-  final String LoginResponse;
-
-  ResendLoginSuccess(this.LoginResponse);
-
-}
 
 class LoginLoading extends LoginState {}
 

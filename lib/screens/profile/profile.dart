@@ -6,10 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/main.dart';
+import 'package:ircf/screens/login/phone_screen.dart';
 import 'package:ircf/screens/notification/notification.dart';
 import 'package:ircf/screens/profile/edit_profile.dart';
 import 'package:ircf/screens/profile/terms_condition.dart';
+import 'package:ircf/utils/preferences_data.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -21,8 +25,47 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final ImagePicker _picker = ImagePicker();
   File? imageFile;
+  String name = '';
+  String email = '';
+  String dob = '';
+  String mobile = '';
+  String gender = '';
+  String user_type = '';
+
   @override
   Widget build(BuildContext context) {
+     PreferenceData.getData('user_name').then((value) {
+      setState(() {
+        name = value.toString();
+      });
+    });
+     PreferenceData.getData('user_email').then((value) {
+       setState(() {
+         email = value.toString();
+       });
+     });
+      PreferenceData.getData('user_dob').then((value) {
+       setState(() {
+         dob = value.toString();
+       });
+     });
+
+      PreferenceData.getData('user_mobile').then((value) {
+       setState(() {
+         mobile = value.toString();
+       });
+     });
+      PreferenceData.getData('user_gender').then((value) {
+       setState(() {
+         gender = value.toString();
+       });
+     });
+      PreferenceData.getData('user_type').then((value) {
+       setState(() {
+         user_type = value.toString();
+       });
+     });
+
     return Scaffold(
         backgroundColor: AppColor.whiteBG,
         body: Stack(
@@ -58,14 +101,14 @@ class _ProfileState extends State<Profile> {
                               child: Column(
                                 children: [
                                   const SizedBox(height: 87),
-                                  Text('James S. Hernandez',
+                                  Text(name,
                                   style: GoogleFonts.jost(
                                     fontSize: AppConstants.XXLARGE,
                                     fontWeight: FontWeight.w500,
                                     color: AppColor.textColor
                                   ),),
                                   const SizedBox(height: 4,),
-                                  Text('hernandex.redial@gmail.ac.in',
+                                  Text(email,
                                     style: GoogleFonts.mulish(
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,
@@ -81,7 +124,8 @@ class _ProfileState extends State<Profile> {
                                         splashColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: (){
-                                          pushNewScreen(context, screen: const EditProfile(),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                                          pushNewScreen(context, screen:  EditProfile(name: name, email: email, dob: dob,
+                                            mobile: mobile, gender: gender , user_type: user_type,),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.only(bottom: 18.0),
@@ -152,7 +196,7 @@ class _ProfileState extends State<Profile> {
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: (){
-                                        pushNewScreen(context, screen: Notifications(),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                                        pushNewScreen(context, screen: const Notifications(),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(vertical: 18.0),
@@ -326,6 +370,52 @@ class _ProfileState extends State<Profile> {
                                               SvgPicture.asset('assets/images/right_arrow.svg')
                                             ],
                                           )),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: ()async{
+
+                                            SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+                                            sharedPreference.remove('login');
+                                            sharedPreference.remove('token');
+                                            sharedPreference.clear();
+
+                                            Navigator.of(context, rootNavigator: true)
+                                                .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (context) => const PhoneScreen()),
+                                                  (Route<dynamic> route) => false,
+                                            );
+                                          },
+                                          child: Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 18.0),
+
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                    child: Row(
+                                                      children: [
+                                                        const Icon(Icons.logout_outlined),
+                                                        const SizedBox(width: 14,),
+                                                        Flexible(
+                                                          child: Text('Log Out',
+                                                            maxLines: 1,
+                                                            textScaleFactor: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: GoogleFonts.mulish(
+                                                                fontSize: 15,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: AppColor.textColor
+                                                            ),),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SvgPicture.asset('assets/images/right_arrow.svg')
+                                                ],
+                                              )),
                                         ),
                                         const SizedBox(height: 36,),
                                       ],

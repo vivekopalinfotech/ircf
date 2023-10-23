@@ -1,7 +1,11 @@
 
 
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ircf/color/app_color.dart';
 
 
 class AppConstants {
@@ -13,5 +17,12 @@ class AppConstants {
   static const XLARGE = 20.0;
   static const XXLARGE = 24.0;
   static const HORIZONTAL_PADDING = 34.0;
-
+  static Widget LOADER = Center(
+    child: Platform.isIOS ?
+        CupertinoActivityIndicator(
+          color: AppColor.primaryColor,
+        ):CircularProgressIndicator(
+      color: AppColor.primaryColor,
+    )
+  );
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -11,11 +13,18 @@ import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/screens/login/fill_profile.dart';
 import 'package:ircf/utils/app_utils.dart';
+import 'package:ircf/utils/preferences_data.dart';
 
 import 'package:ircf/widgets/title_bar.dart';
-enum Role { Student, Doctor, Nurse, }
+enum Role {Student, Doctor, Nurse,}
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  final String name;
+  final String dob;
+  final String email;
+  final String mobile;
+  final String gender;
+  final String user_type;
+  const EditProfile({super.key, required this.name, required this.dob, required this.email, required this.mobile, required this.gender, required this.user_type});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -30,14 +39,31 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController genderController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   Gender selectedGender = Gender.Male;
-  Role selectedRole = Role.Student;
+  Role selectedRole = Role.Nurse;
   final ImagePicker _picker = ImagePicker();
   File? imageFile;
+
+
+
 
   @override
   void initState() {
 
+    fullNameController.text = widget.name;
+    dobController.text = AppUtils.oldDate(widget.dob);
+    emailController.text = widget.email;
+    phoneController.text = widget.mobile;
+    genderController.text = widget.gender == '0'?(selectedGender = Gender.Male).toString().split('.')[1]
+        :widget.gender == "1"?(selectedGender = Gender.Female).toString().split('.')[1]:(selectedGender = Gender.Other).toString().split('.')[1];
+    roleController.text = widget.user_type == 'student'?(selectedRole = Role.Student).toString().split('.')[1]:
+    widget.user_type == 'nurse'?(selectedRole = Role.Nurse).toString().split('.')[1]:(selectedRole = Role.Doctor).toString().split('.')[1];
     super.initState();
+    print(widget.gender);
+    print(widget.mobile);
+    print(widget.email);
+    print(widget.dob);
+    print(widget.name);
+    print(widget.user_type);
   }
   @override
   Widget build(BuildContext context) {
@@ -160,49 +186,6 @@ class _EditProfileState extends State<EditProfile> {
                       child: Container(
                         height: 60,
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-
-                        child: MediaQuery(
-                          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: nickNameController,
-                            autofocus: false,
-                            style: GoogleFonts.montserrat(
-                              color: Colors.black,
-                              fontStyle: FontStyle.normal,
-                              fontSize: AppConstants.SMALL,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              hintText: 'Nick Name',
-                              hintStyle: GoogleFonts.montserrat(
-                                color: AppColor.hintColor,
-                                fontStyle: FontStyle.normal,
-                                fontSize: AppConstants.SMALL,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1.0), borderRadius: BorderRadius.all(Radius.circular(12))),
-                              enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent), borderRadius: BorderRadius.all(Radius.circular(30))),
-                              counterText: "",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Card(
-                      elevation: 1,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:  BorderRadius.all(Radius.circular(12))
-                      ),
-                      margin: EdgeInsets.zero,
-                      color: Colors.white,
-                      child: Container(
-                        height: 60,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: MediaQuery(
                           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                           child: TextFormField(
@@ -259,7 +242,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     Card(
                       elevation: 1,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius:  BorderRadius.all(Radius.circular(12))
                       ),
                       margin: EdgeInsets.zero,
@@ -309,21 +292,20 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     Card(
                       elevation: 1,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius:  BorderRadius.all(Radius.circular(12))
                       ),
                       margin: EdgeInsets.zero,
                       color: Colors.white,
-                      child: Container(
+                      child: SizedBox(
                         height: 60,
-                        padding: const EdgeInsets.only(top: 16),
                         child: IntlPhoneField(
                           style: GoogleFonts.jost(color: Colors.black),
                           dropdownTextStyle: GoogleFonts.jost(color: Colors.black),
                           dropdownDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          disableLengthCheck: false,
+                          disableLengthCheck: true,
                           flagsButtonMargin: EdgeInsets.zero,
                           flagsButtonPadding: const EdgeInsets.all(8),
                           dropdownIconPosition: IconPosition.trailing,
@@ -340,7 +322,7 @@ class _EditProfileState extends State<EditProfile> {
                               backgroundColor: AppColor.secondaryColor,
                               countryCodeStyle: GoogleFonts.jost(color: Colors.black),
                               countryNameStyle: GoogleFonts.jost(color: Colors.black),
-                              searchFieldPadding: EdgeInsets.all(8),
+                              searchFieldPadding: const EdgeInsets.all(8),
                               searchFieldInputDecoration: InputDecoration(
                                 hintStyle: GoogleFonts.jost(
                                   color: Colors.black,
@@ -352,7 +334,6 @@ class _EditProfileState extends State<EditProfile> {
                           controller: phoneController,
                           onChanged: (phone) {
                             print(phone.completeNumber);
-
                           },
                         ),
                       ),
@@ -362,7 +343,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     Card(
                       elevation: 1,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius:  BorderRadius.all(Radius.circular(12))
                       ),
                       margin: EdgeInsets.zero,
@@ -374,6 +355,8 @@ class _EditProfileState extends State<EditProfile> {
                           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                           child: DropdownButtonFormField<Gender>(
                             style: GoogleFonts.jost(color: Colors.black),
+                            borderRadius: BorderRadius.circular(12),
+                            isDense: true,
                             decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -420,6 +403,8 @@ class _EditProfileState extends State<EditProfile> {
                           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                           child: DropdownButtonFormField<Role>(
                             style: GoogleFonts.jost(color: Colors.black),
+                            borderRadius: BorderRadius.circular(12),
+                            isDense: true,
                             decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide.none,

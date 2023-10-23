@@ -45,7 +45,7 @@ class _CertificateState extends State<Certificate> {
               child:   CachedNetworkImage(
                 imageUrl: 'https://priyadogra.com/wp-content/uploads/2020/08/Career-Development-College-London-Free-Online-Course-with-Certificate-Priya.png',
                   fit: BoxFit.cover,
-                progressIndicatorBuilder: (context, url, progress) => CupertinoActivityIndicator(),
+                progressIndicatorBuilder: (context, url, progress) => const CupertinoActivityIndicator(),
               ),
             )
           ],

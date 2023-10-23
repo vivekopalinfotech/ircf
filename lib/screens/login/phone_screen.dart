@@ -29,14 +29,16 @@ class _PhoneScreenState extends State<PhoneScreen> {
      backgroundColor: AppColor.whiteBG,
       body: BlocConsumer<MobileCubit, CheckMobileState>(listener: (context, state) async {
       if (state is CheckMobileSuccess) {
-        if(state.mobileResponse.message == "User is not registered with this mobile number."){
+        if(state.msg == "User is not registered with this mobile number."){
           Navigator.push(context, MaterialPageRoute(builder: (context) => FillProfile(mobile: mobile)));
         }else{
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  OtpScreen(mobile: mobile)));
         }
 
       }
-      if (state is CheckMobileError) {}
+      if (state is CheckMobileError) {
+        showSnackBar(context, 'error');
+      }
     }, builder: (context, state) {
         return
 

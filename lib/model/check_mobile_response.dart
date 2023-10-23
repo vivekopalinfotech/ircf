@@ -1,13 +1,16 @@
-class MobileResponse{
+class RegisterResponse{
+  final bool? success;
   final String? message;
 
-  MobileResponse(this.message);
+  RegisterResponse(this.success,this.message);
 
-  MobileResponse.fromJson(Map<String, dynamic> json)
+  RegisterResponse.fromJson(Map<String, dynamic> json)
       :
+        success = json['success'] as bool?,
         message = json['message'] as String?;
 
   Map<String, dynamic> toJson() => {
+    'success' : success,
     'message' : message,
   };
 }

@@ -16,8 +16,8 @@ abstract class CheckMobileState{
 class CheckMobileInitial extends CheckMobileState {}
 
 class CheckMobileSuccess extends CheckMobileState {
-  final MobileResponse mobileResponse;
-  CheckMobileSuccess(this.mobileResponse);
+  final String msg;
+  CheckMobileSuccess(this.msg);
 
 }
 

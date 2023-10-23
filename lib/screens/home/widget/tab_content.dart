@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ircf/screens/home/bcls.dart';
-import 'package:ircf/screens/home/cols.dart';
+
+import 'package:ircf/screens/home/course_category.dart';
 
 class TabContent extends StatefulWidget {
   final String tabName;
@@ -14,18 +14,8 @@ class TabContent extends StatefulWidget {
 class _TabContentState extends State<TabContent> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-
-      children: [
-        widget.tabName == 'COLS Course'?
-            Cols(
-              name:widget.tabName,
-              slug:widget.slug
-            ):Bcls(
-            name:widget.tabName,
-            slug:widget.slug
-        )
-      ],
-    );
+    return CourseCategory(
+      name: widget.tabName,
+      slug:widget.slug);
   }
 }

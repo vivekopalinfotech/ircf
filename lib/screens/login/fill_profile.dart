@@ -10,8 +10,9 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
-import 'package:ircf/cubit/login/login_cubit.dart';
-import 'package:ircf/cubit/login/login_state.dart';
+
+import 'package:ircf/cubit/register/register_cubit.dart';
+import 'package:ircf/cubit/register/register_state.dart';
 import 'package:ircf/screens/home/dashboard.dart';
 import 'package:ircf/main_screen.dart';
 import 'package:ircf/utils/app_utils.dart';
@@ -35,7 +36,7 @@ class _FillProfileState extends State<FillProfile> {
   final dobController = TextEditingController();
   final emailController = TextEditingController();
   TextEditingController genderController = TextEditingController();
-  Gender selectedGender = Gender.Male;
+  Gender selectedGender = Gender.Other;
   final ImagePicker _picker = ImagePicker();
   File? imageFile;
 
@@ -50,19 +51,19 @@ class _FillProfileState extends State<FillProfile> {
     return Scaffold(
       backgroundColor: AppColor.whiteBG,
       body:
-      BlocConsumer<LoginCubit, LoginState>(listener: (context, state) async {
-        if (state is LoginSuccess) {
+      BlocConsumer<RegisterCubit, RegisterState>(listener: (context, state) async {
+        if (state is RegisterSuccess) {
           phoneController.text.isNotEmpty && fullNameController.text.isNotEmpty &&
               dobController.text.isNotEmpty && emailController.text.isNotEmpty?
 
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  const MainScreen(redirectPageName: 'home',))):showSnackBar(context, 'Please Enter details');
 
         }
-        if (state is LoginError) {
+        if (state is RegisterError) {
 
           showSnackBar(context, state.message);
         }
-        if(state is LoginLoading){
+        if(state is RegisterLoading){
           showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -447,9 +448,8 @@ class _FillProfileState extends State<FillProfile> {
                         ),
                       )),
                   onPressed: () {
-                    BlocProvider.of<LoginCubit>(context).register(fullNameController.text,
-                      nickNameController.text,AppUtils.convertDate(selectedDate.toString()),emailController.text,phoneController.text,genderController.text,'',
-                      '','','','','',''
+                    BlocProvider.of<RegisterCubit>(context).register(fullNameController.text,
+                     AppUtils.convertDate(selectedDate.toString()),emailController.text,phoneController.text,genderController.text == 'Male'?"0":genderController.text == 'Female'? "1":"2",
                     );
                   },
                   child: Row(

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
-import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/model/all_listing_response.dart';
+import 'package:ircf/model/course_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
-import 'package:ircf/screens/home/curriculum.dart';
 import 'package:ircf/screens/home/widget/curriculum_list.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:readmore/readmore.dart';
 
 class DetailTabs extends StatefulWidget {
   final controller;
+  final type;
   final List<CourseModule>? courseModule;
-  const DetailTabs({super.key, this.controller,this.courseModule});
+  final List<CourseDetail>? courseDetail;
+  final List<Course>? course;
+  const DetailTabs({super.key, this.controller,this.courseModule, this.courseDetail, this.type, this.course});
 
   @override
   State<DetailTabs> createState() => _DetailTabsState();
@@ -92,26 +93,47 @@ class _DetailTabsState extends State<DetailTabs> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    RichText(
-                        textScaleFactor: 1,
-                        text: TextSpan(
-                      text: 'Section 01 - ',
-                      style: GoogleFonts.jost(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.textColor
-                      ),
-                      children: [
-                        TextSpan(
-                          text: widget.courseModule![0].main_module!.module_title.toString(),
-                          style: GoogleFonts.jost(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.primaryColor
-                          ),
-                        )
-                      ]
-                    )),
+                    Flexible(
+                      child: RichText(
+                          textScaleFactor: 1,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                        text: 'Section 01 - ',
+                        style: GoogleFonts.jost(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.textColor
+                        ),
+                        children: [
+                   widget.type == 'category'   ?
+                   TextSpan(
+                       text: widget.courseDetail![0].crs_name.toString(),
+                       style: GoogleFonts.jost(
+                           fontSize: 15,
+                           fontWeight: FontWeight.w500,
+                           color: AppColor.primaryColor
+                       ),
+                   ):  widget.type == 'all'   ?
+                   TextSpan(
+                     text: widget.course![0].crs_name.toString(),
+                     style: GoogleFonts.jost(
+                         fontSize: 15,
+                         fontWeight: FontWeight.w500,
+                         color: AppColor.primaryColor
+                     ),
+                   ):
+                   TextSpan(
+                            text: widget.courseModule![0].main_module!.module_title.toString(),
+                            style: GoogleFonts.jost(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.primaryColor
+                            ),
+                          )
+                        ]
+                      )),
+                    ),
                     Text('25 Mins',
                       style: GoogleFonts.mulish(
                           fontSize: 12,
@@ -124,11 +146,11 @@ class _DetailTabsState extends State<DetailTabs> {
 
                 Expanded(
                   child: ListView.separated(
-                    itemCount: widget.courseModule![0].main_module!.course_videos!.length,
+                    itemCount:   widget.type == 'category' ? 1: widget.type == 'all' ? 1: widget.courseModule![0].main_module!.course_videos!.length,
                     shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context,index){
-                      return CurriculumList(number: widget.courseModule![0].main_module!.course_videos!.length,
+                      return CurriculumList(number:  widget.type == 'category'   ?1:widget.type == 'all' ? 1: widget.courseModule![0].main_module!.course_videos!.length,
                       chapter: 'Chapter - ${index+1}',time: item[index].time,icon: 'assets/images/watch.svg',);
                   }, separatorBuilder: (BuildContext context, int index) {
                       return Divider(color: AppColor.secondaryColor,
