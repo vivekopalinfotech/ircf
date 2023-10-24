@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,11 +39,16 @@ class _ListingDetailState extends State<ListingDetail> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height*.4,
-                    color: Colors.black,
                     child: Stack(
                       children: [
+
+                        // CachedNetworkImage(
+                        //   imageUrl: '',
+                        //   fit: BoxFit.cover,
+                        //   progressIndicatorBuilder: (context, url, progress) => const CupertinoActivityIndicator(),
+                        // ),
                         Align(
                           alignment: Alignment.topLeft,
                           child: Padding(

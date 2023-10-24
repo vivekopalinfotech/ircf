@@ -61,7 +61,7 @@ class _FillProfileState extends State<FillProfile> {
         }
         if (state is RegisterError) {
 
-          showSnackBar(context, state.message);
+          showSnackBar(context, state.message.toString());
         }
         if(state is RegisterLoading){
           showDialog(
@@ -220,41 +220,7 @@ class _FillProfileState extends State<FillProfile> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      height: 60,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(12))),
-                      child: MediaQuery(
-                        data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                        child: TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: nickNameController,
-                          autofocus: false,
-                          style: GoogleFonts.montserrat(
-                            color: Colors.black,
-                            fontStyle: FontStyle.normal,
-                            fontSize: AppConstants.SMALL,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            hintText: 'Nick Name',
-                            hintStyle: GoogleFonts.montserrat(
-                              color: AppColor.hintColor,
-                              fontStyle: FontStyle.normal,
-                              fontSize: AppConstants.SMALL,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1.0), borderRadius: BorderRadius.all(Radius.circular(12))),
-                            enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent), borderRadius: BorderRadius.all(Radius.circular(30))),
-                            counterText: "",
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+
                     Container(
                       height: 60,
                       padding: const EdgeInsets.symmetric(horizontal: 10),

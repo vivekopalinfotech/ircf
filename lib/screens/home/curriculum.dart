@@ -103,7 +103,7 @@ class _CurriculumState extends State<Curriculum> {
                                 );
                               },
                               separatorBuilder: (BuildContext context, int index) {
-                                return Divider(
+                                return const Divider(
                                   height: 32,
                                 );
                               },
@@ -134,7 +134,7 @@ class _CurriculumState extends State<Curriculum> {
                         ),
                       )),
                   onPressed: () {
-                    pushNewScreen(context, screen: PaymentMethod(), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
+                    pushNewScreen(context, screen: const PaymentMethod(), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,10 +32,10 @@ class _DashboardState extends State<Dashboard> {
   late PageController _pageController;
   String activePageIndex = '';
   var name;
+
   @override
   void initState() {
     _pageController = PageController();
-
     BlocProvider.of<CourseCategoryCubit>(context).courseCategory();
     BlocProvider.of<CourseModuleCubit>(context).courseModule();
     super.initState();
@@ -274,7 +276,7 @@ class _DashboardState extends State<Dashboard> {
                 if (state is CourseModuleError) {}
               }, builder: (context, state) {
                 if (state is CourseModuleSuccess) {
-                  return SizedBox(height: 250, child: ListView(scrollDirection: Axis.horizontal, children: _getCards(state.courseModuleResponse)));
+                  return SizedBox(height: 250, child: ListView(scrollDirection: Axis.horizontal, children: _getCards(state.courseModuleResponse,)));
                 }
                 return AppConstants.LOADER;
               }),
@@ -408,7 +410,7 @@ class _DashboardState extends State<Dashboard> {
                               maxLines: 1,
                               style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
                             ),
-                            SaveWidget(
+                            const SaveWidget(
                               favdata: false,
                             )
                           ],
@@ -435,7 +437,7 @@ class _DashboardState extends State<Dashboard> {
                               highlightColor: Colors.transparent,
                               onTap: () {
                                 pushNewScreen(context,
-                                    screen: ListingDetail(courseModule: state.courseModuleResponse.course_module!, title: state.courseModuleResponse.course!.crs_name),
+                                    screen: ListingDetail(courseModule: state.courseModuleResponse.course_module!, title: state.courseModuleResponse.course!.crs_name, ),
                                     withNavBar: false,
                                     pageTransitionAnimation: PageTransitionAnimation.fade);
                               },
