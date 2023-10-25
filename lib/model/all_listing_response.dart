@@ -35,6 +35,7 @@ class Course {
   final int? crs_category;
   final int? crs_status;
   final String? crs_image;
+  final String? course_time;
   final String? crs_crt_background_image;
   final String? crs_created_by;
 
@@ -49,6 +50,7 @@ class Course {
     this.crs_category,
     this.crs_status,
     this.crs_image,
+    this.course_time,
     this.crs_crt_background_image,
     this.crs_created_by,
 
@@ -65,6 +67,7 @@ class Course {
         crs_category = json['crs_category'] as int?,
         crs_status = json['crs_status'] as int?,
         crs_image = json['crs_image'].toString(),
+        course_time = json['course_time'].toString(),
         crs_crt_background_image = json['crs_crt_background_image'].toString(),
         crs_created_by = json['crs_created_by'].toString();
 
@@ -79,6 +82,7 @@ class Course {
     'crs_category' : crs_category,
     'crs_status' : crs_status,
     'crs_image' : crs_image,
+    'course_time' : course_time,
     'crs_crt_background_image' : crs_crt_background_image,
     'crs_created_by' : crs_created_by,
 

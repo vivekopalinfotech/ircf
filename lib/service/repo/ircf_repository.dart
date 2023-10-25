@@ -10,6 +10,7 @@ import 'package:ircf/model/check_mobile_response.dart';
 import 'package:ircf/model/course_category_response.dart';
 import 'package:ircf/model/course_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
+import 'package:ircf/model/my_courses_response.dart';
 import 'package:ircf/model/user_response.dart';
 import 'package:ircf/utils/preferences_data.dart';
 
@@ -23,11 +24,11 @@ class IrcfRepository {
     } catch (e) {}
     return null;
   }
-  Future<CourseModuleResponse> courseModule() async {
+  Future<CourseModuleResponse> courseModule(String id) async {
     try {
       deviceToken = await getDeviceToken();
       final response = await dio.get(
-        "https://cprinew.cprindia.in/api/course_module/14",
+        "https://cprinew.cprindia.in/api/course_module/$id",
       );
       log(jsonEncode(response.data));
       return CourseModuleResponse.fromJson(response.data);
@@ -104,7 +105,57 @@ class IrcfRepository {
     }
   }
 
+  Future<String> payment(String std_ppl_id,String csr_id) async {
+    FormData data = FormData();
 
+    data = FormData.fromMap({
+      "std_ppl_id": std_ppl_id,
+      "csr_id": csr_id,
+    });
+    try {
+      final response = await dio.post(
+        "https://cprinew.cprindia.in/api/add_batch_student",
+        data: data,
+      );
+
+
+      log(jsonEncode(response.data));
+      return response.data['message'];
+
+    } on DioError catch (e) {
+      //print(e);
+      throw e.response!.data['message'];
+    } catch (e) {
+      //print(e);
+      throw e.toString();
+    }
+  }
+
+
+  Future<MyCoursesResponse> ongoingMyCourses(String userId) async {
+    FormData data = FormData();
+
+    data = FormData.fromMap({
+      "user_id": userId,
+    });
+    try {
+      final response = await dio.post(
+        "https://cprinew.cprindia.in/api/my_courses",
+        data: data,
+      );
+
+
+      log(jsonEncode(response.data));
+      return MyCoursesResponse.fromJson(response.data);
+
+    } on DioError catch (e) {
+      //print(e);
+      throw e.response!.data['message'];
+    } catch (e) {
+      //print(e);
+      throw e.toString();
+    }
+  }
   Future<String> checkMobile(String mobile) async {
     FormData data = FormData();
 

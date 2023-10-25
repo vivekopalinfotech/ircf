@@ -133,9 +133,12 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_course_cubit.dart';
+import 'package:ircf/main.dart';
 import 'package:ircf/screens/my_courses/completed.dart';
 import 'package:ircf/screens/my_courses/ongoing.dart';
 
@@ -154,6 +157,7 @@ class _MyCoursesState extends State<MyCourses> {
   @override
   void initState() {
     _pageController = PageController();
+
     super.initState();
   }
 
@@ -198,11 +202,12 @@ class _MyCoursesState extends State<MyCourses> {
                           ),
                           tabs: const [
                             Tab(
-                              text: 'Completed',height: 48,
-                            ),
-                            Tab(
                               text: 'Ongoing',height: 48,
                             ),
+                            Tab(
+                              text: 'Completed',height: 48,
+                            ),
+
                           ],
                           indicatorColor: AppColor.secondaryColor,
                           labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
@@ -215,8 +220,9 @@ class _MyCoursesState extends State<MyCourses> {
                     ]),
                     const Expanded(
                       child: TabBarView(children: [
-                        Completed(),
                         Ongoing(),
+                        Completed(),
+
                       ]),
                     )
                   ],

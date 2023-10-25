@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
@@ -8,16 +9,17 @@ import 'package:ircf/model/course_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/detail_tabs.dart';
 import 'package:ircf/screens/home/widget/curriculum_list.dart';
+import 'package:ircf/screens/my_courses/video_player.dart';
 import 'package:ircf/screens/payment/payment.dart';
 import 'package:ircf/widgets/title_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Curriculum extends StatefulWidget {
   final type;
-  final List<CourseModule>? courseModule;
+  final String amount;
   final List<CourseDetail>? courseDetail;
-  final List<Course>? course;
-  const Curriculum({super.key, this.type, required this.courseModule, this.courseDetail, this.course});
+  final List<CourseModule>? course;
+  const Curriculum({super.key, this.type,this.courseDetail, this.course, required this.amount});
 
   @override
   State<Curriculum> createState() => _CurriculumState();
@@ -52,7 +54,7 @@ class _CurriculumState extends State<Curriculum> {
                             padding: const EdgeInsets.all(25),
                             child: ListView.separated(
                               itemCount:    widget.type == 'category'   ?
-                              widget.courseDetail!.length:  widget.type == 'all'   ?widget.course!.length:widget.courseModule!.length,
+                              widget.courseDetail!.length:  widget.course!.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
@@ -69,28 +71,112 @@ class _CurriculumState extends State<Curriculum> {
                                             overflow: TextOverflow.ellipsis,
                                             text: TextSpan(text: 'Section ${index+1} - ', style: GoogleFonts.jost(fontSize: 15, fontWeight: FontWeight.w500, color: AppColor.textColor), children: [
                                               TextSpan(
-                                                text:   widget.type == 'category'   ? widget.courseDetail![index].crs_name:widget.type == 'all'   ?widget.course![index].crs_name:widget.courseModule![index].main_module!.module_title,
+                                                text:   widget.type == 'category'   ? widget.courseDetail![index].crs_name:widget.course![index].main_module!.module_title,
                                                 style: GoogleFonts.jost(fontSize: 15, fontWeight: FontWeight.w500, color: AppColor.primaryColor),
                                               )
                                             ]))),
-                                        Text(
-                                          '25 Mins',
-                                          style: GoogleFonts.mulish(fontSize: 12, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
-                                        )
+                                        widget.course![index].main_module!.sub_module!=null?
+
+                                        SizedBox():
+                                        index== 0?
+                                        InkWell(
+                                            splashColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: (){
+                                              pushNewScreen(context, screen: VideoPlayerScreen(url: widget.course![index].main_module!.sub_module!= null?widget.course![index].main_module!.sub_module![0].course_videos![0].course_video.toString():widget.course![index].main_module!.course_videos![0].course_video.toString(),
+                                              title:widget.type == 'category'   ? widget.courseDetail![index].crs_name:widget.course![index].main_module!.module_title,
+                                              ),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                                            },
+                                            child: SizedBox(
+                                                height: 20,width: 20,
+                                                child: SvgPicture.asset('assets/images/watch.svg'))): InkWell(
+                                            splashColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: (){
+                                              //     widget.icon== 'assets/images/lock.svg' ?'':  pushNewScreen(context, screen: VideoPlayerScreen(),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                                            },
+                                            child: SizedBox(
+                                                height: 20,width: 20,
+                                                child: SvgPicture.asset('assets/images/lock.svg'))),
                                       ],
                                     ),
                                     const SizedBox(height: 8,),
-                                    ListView.separated(
-                                      itemCount:  widget.type == 'category'   ?1:widget.type == 'all'   ?1:widget.courseModule![index].main_module!.course_videos!.length,
+                                      ListView.separated(
+                                      itemCount:  widget.type == 'category'   ?1: widget.course![index].main_module!.sub_module!=null?widget.course![index].main_module!.sub_module!.length:0,
                                       shrinkWrap: true,
                                       physics: const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        return CurriculumList(
-                                          number: index+1,
-                                          chapter: 'Chapter - ${index+1}',
-                                          time: '25 mins',
-                                          icon: 'assets/images/watch.svg',
-                                        );
+                                      itemBuilder: (context, index1) {
+                                        return Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                flex: 4,
+                                                child: Row(
+                                                  children: [
+                                                    Flexible(
+                                                      flex:1,
+                                                      child: Container(
+                                                        height: 46,width: 46,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(50),
+                                                            color: AppColor.cardColor
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                          '${index1 + 1}',
+                                                            style: GoogleFonts.jost(
+                                                                fontWeight: FontWeight.w500,
+                                                                fontSize: AppConstants.SMALL,
+                                                                color: AppColor.textColor
+                                                            ),),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 12,),
+                                                    Flexible(
+                                                      flex: 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('${widget.course![index].main_module!.sub_module![index1].module_title} ',
+                                                            textScaleFactor: 1,
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: GoogleFonts.jost(
+                                                                fontWeight: FontWeight.w500,
+                                                                fontSize: AppConstants.MEDIUM,
+                                                                color: AppColor.textColor
+                                                            ),),
+                                                          Text('15 mins',
+                                                            textScaleFactor: 1,
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: GoogleFonts.mulish(
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 13,
+                                                                color: AppColor.secondaryTextColor
+                                                            ),),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Flexible(
+                                                flex: 1,
+                                                child: InkWell(
+                                                    splashColor: Colors.transparent,
+                                                    highlightColor: Colors.transparent,
+                                                    onTap: (){
+                                                 //     widget.icon== 'assets/images/lock.svg' ?'':  pushNewScreen(context, screen: VideoPlayerScreen(),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                                                    },
+                                                    child: SizedBox(
+                                                        height: 20,width: 20,
+                                                        child: SvgPicture.asset('assets/images/lock.svg'))),
+                                              )
+                                            ],
+                                          );
+
                                       },
                                       separatorBuilder: (BuildContext context, int index) {
                                         return Divider(
@@ -98,7 +184,7 @@ class _CurriculumState extends State<Curriculum> {
                                           height: 48,
                                         );
                                       },
-                                    ),
+                                    )
                                   ],
                                 );
                               },
@@ -144,7 +230,7 @@ class _CurriculumState extends State<Curriculum> {
                       ),
                       Center(
                         child: Text(
-                          'Enroll Course - \$${55}',
+                          'Enroll Course  ₹ ${widget.amount}',
                           textScaleFactor: 1,
                           style: GoogleFonts.jost(color: Colors.white, fontSize: AppConstants.LARGE, fontWeight: FontWeight.w500),
                         ),

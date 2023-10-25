@@ -81,7 +81,7 @@ class _CurriculumListState extends State<CurriculumList> {
             splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: (){
-                widget.icon== 'assets/images/lock.svg' ?'':  pushNewScreen(context, screen: VideoPlayerScreen(),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
+                widget.icon== 'assets/images/lock.svg' ?'':  pushNewScreen(context, screen: VideoPlayerScreen(url: '',),pageTransitionAnimation: PageTransitionAnimation.fade,withNavBar: false);
               },
               child: SizedBox(
                   height: 20,width: 20,

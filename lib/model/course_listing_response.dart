@@ -60,6 +60,7 @@ class CourseDetail {
   final String? crs_name;
   final String? crs_short_name;
   final String? crs_image;
+  final String? crs_amount;
   final int? crs_type;
 
 
@@ -68,6 +69,7 @@ class CourseDetail {
     this.crs_name,
     this.crs_short_name,
     this.crs_image,
+    this.crs_amount,
     this.crs_type,
 
   });
@@ -78,6 +80,7 @@ class CourseDetail {
         crs_name = json['crs_name'] as String?,
         crs_short_name = json['crs_short_name'] as String?,
         crs_image = json['crs_image'] as String?,
+        crs_amount = json['crs_amount'] as String?,
         crs_type = json['crs_type'] as int?;
 
 
@@ -86,6 +89,7 @@ class CourseDetail {
     'crs_name' : crs_name,
     'crs_short_name' : crs_short_name,
     'crs_image' : crs_image,
+    'crs_amount' : crs_amount,
     'crs_type' : crs_type,
 
 

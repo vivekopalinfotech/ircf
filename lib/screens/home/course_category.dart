@@ -61,12 +61,12 @@ class _CourseCategoryState extends State<CourseCategory> {
                     children: [
                       Container(
                         height: 130,width: 130,
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(16),
                               bottomLeft: Radius.circular(16),
                             ),
-                            color: Colors.black
+                            image: DecorationImage(image: NetworkImage('${AppConstants.IMAGE_URL}${state.courseListingResponse.course_detail![index].crs_image}'))
                         ),
                       ),
                       Flexible(child: Padding(
@@ -112,7 +112,7 @@ class _CourseCategoryState extends State<CourseCategory> {
                             RichText(
                                 textScaleFactor: 1,
                                 text: TextSpan(
-                                    text: '${0} ',
+                                    text: '${state.courseListingResponse.course_detail![index].crs_amount!='0'?state.courseListingResponse.course_detail![index].crs_amount:'Free'} ',
                                     style: GoogleFonts.mulish(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class _CourseCategoryState extends State<CourseCategory> {
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: '0',
+                                        text: '',
                                         style: GoogleFonts.mulish(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
@@ -139,7 +139,10 @@ class _CourseCategoryState extends State<CourseCategory> {
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: (){
-                                    pushNewScreen(context, screen:  ListingDetail(title: state.courseListingResponse.course_detail![index].crs_short_name.toString(),type:'category',courseDetail: state.courseListingResponse.course_detail!),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
+                                    pushNewScreen(context, screen:  ListingDetail(title: state.courseListingResponse.course_detail![index].crs_short_name.toString(),
+                                        subtitle:state.courseListingResponse.course_detail![index].crs_name.toString(),
+                                        type:'category',courseDetail: state.courseListingResponse.course_detail!,
+                                      id: state.courseListingResponse.course_detail![index].crs_id.toString()),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
                                   },
                                   child: Row(
                                     children: [

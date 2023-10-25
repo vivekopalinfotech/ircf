@@ -16,7 +16,9 @@ class AppConstants {
   static const LARGE = 18.0;
   static const XLARGE = 20.0;
   static const XXLARGE = 24.0;
-  static const HORIZONTAL_PADDING = 34.0;
+  static const HORIZONTAL_PADDING = 16.0;
+  static const IMAGE_URL = "https://cprinew.cprindia.in/public/upload/course/";
+  static const VIDEO_URL = "https://cprinew.cprindia.in/public/upload/course_module/";
   static Widget LOADER = Center(
     child: Platform.isIOS ?
         CupertinoActivityIndicator(

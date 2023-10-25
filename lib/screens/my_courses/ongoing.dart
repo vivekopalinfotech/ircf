@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_course_cubit.dart';
+import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_courses_state.dart';
+import 'package:ircf/main.dart';
 import 'package:ircf/screens/my_courses/my_courses_details.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -29,96 +33,117 @@ class _OngoingState extends State<Ongoing> {
   ];
 
   @override
+  void initState() {
+    BlocProvider.of<OngoingMyCoursesCubit>(context).ongoingMyCourses(userId);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColor.whiteBG,
-        body: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 17),
-            itemCount: filterCat.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: (){
-                  pushNewScreen(context, screen: const MyCoursesDetail(type: 'Ongoing',),withNavBar: false,pageTransitionAnimation: PageTransitionAnimation.fade);
-                },
-                child: Card(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    elevation: 2,
-                    shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 130,
-                          width: 130,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                bottomLeft: Radius.circular(16),
-                              ),
-                              color: Colors.black),
-                        ),
-                        Flexible(
-                            child: Padding(
-                          padding: const EdgeInsets.all(14),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                filterCat[index].name,
-                                textScaleFactor: 1,
-                                style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                filterCat[index].title,
-                                textScaleFactor: 1,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10, bottom: 14),
-                                child: Text(
-                                  ' ${filterCat[index].time}',
-                                  style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: BlocConsumer<OngoingMyCoursesCubit, OngoingMyCoursesState>(listener: (context, state) async {
+          if (state is OngoingMyCoursesSuccess) {}
+          if (state is OngoingMyCoursesError) {}
+        }, builder: (context, state) {
+          if (state is OngoingMyCoursesSuccess) {
+            return ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING, vertical: 17),
+                itemCount: state.myCoursesResponse.data!.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      pushNewScreen(context,
+                          screen:  MyCoursesDetail(
+                            type: 'Ongoing',id: state.myCoursesResponse.data![index].crs_id.toString(),
+                          ),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.fade);
+                    },
+                    child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        elevation: 2,
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 130,
+                              width: 130,
+                              decoration:  BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    bottomLeft: Radius.circular(16),
+                                  ),
+                                  image: DecorationImage(image: NetworkImage(
+                                      '${AppConstants.IMAGE_URL}${state.myCoursesResponse.data![index].crs_image}'
+                                  ))),
+                            ),
+                            Flexible(
+                                child: Padding(
+                              padding: const EdgeInsets.all(14),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(),
-                                  Flexible(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(color: AppColor.secondaryColor),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                      child: LinearProgressIndicator(
-                                        backgroundColor: AppColor.whiteBG,
-                                        valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
-                                        value: filterCat[index].value,
-                                      ),
-                                    ),
+                                  Text(
+                                    state.myCoursesResponse.data![index].crs_short_name.toString(),
+                                    textScaleFactor: 1,
+                                    style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
                                   ),
                                   const SizedBox(
-                                    width: 18,
+                                    height: 10,
                                   ),
                                   Text(
-                                    '${(filterCat[index].progressValue).round()}/${(filterCat[index].totalValue).round()}',
-                                    style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                    state.myCoursesResponse.data![index].crs_name.toString(),
+                                    textScaleFactor: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10, bottom: 14),
+                                    child: Text(
+                                      ' ${state.myCoursesResponse.data![index].course_time.toString()}',
+                                      style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const SizedBox(),
+                                      Flexible(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: Border.all(color: AppColor.secondaryColor),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+                                          child: LinearProgressIndicator(
+                                            backgroundColor: AppColor.whiteBG,
+                                            valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
+                                            value: filterCat[index].value,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 18,
+                                      ),
+                                      Text(
+                                        '${(filterCat[index].progressValue).round()}/${(filterCat[index].totalValue).round()}',
+                                        style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
-                        ))
-                      ],
-                    )),
-              );
-            }));
+                              ),
+                            ))
+                          ],
+                        )),
+                  );
+                });
+          }
+          return AppConstants.LOADER;
+        }));
   }
 }
 

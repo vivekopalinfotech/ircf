@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/main.dart';
 import 'package:ircf/main_screen.dart';
 import 'package:ircf/screens/login/phone_screen.dart';
 import 'package:ircf/utils/preferences_data.dart';
@@ -22,7 +23,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final GlobalKey _one = GlobalKey();
-
+  bool isLoading = true;
 
   PageController pageController = PageController();
   int currentIndex = 0;
@@ -39,14 +40,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     var login = sharedPreference.getString("login");
     print(login);
     if (login == "true") {
-      Future.delayed(const Duration(milliseconds: 100), () {
+      userId = sharedPreference.getString('user_id')!;
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MainScreen(redirectPageName: "home",keyone: _one,)),
         ).then((value) {
         });
+        print('***${userId}');
+    }else{
+      setState(() {
+        isLoading = false;
       });
-
     }
   }
   @override
@@ -58,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteBG,
-      body: Padding(padding: const EdgeInsets.only(top: 70,),
+      body: !isLoading?Padding(padding: const EdgeInsets.only(top: 70,),
       child: Column(
         children: [
           Padding(
@@ -181,7 +185,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           )
         ],
-      ),),
+      ),):AppConstants.LOADER,
 
     );
   }

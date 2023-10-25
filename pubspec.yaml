@@ -56,6 +56,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   sizer: ^2.0.15
   shared_preferences:
+  url_launcher:
 
 
 

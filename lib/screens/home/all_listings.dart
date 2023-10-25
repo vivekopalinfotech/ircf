@@ -56,12 +56,12 @@ class _AllListingsState extends State<AllListings> {
                           Container(
                             height: 130,
                             width: 130,
-                            decoration: const BoxDecoration(
+                            decoration:  BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(16),
                                   bottomLeft: Radius.circular(16),
                                 ),
-                                color: Colors.black),
+                               image: DecorationImage(image: NetworkImage('${AppConstants.IMAGE_URL}${state.allListingResponse.course![index].crs_image}'))),
                           ),
                           Flexible(
                               child: Padding(
@@ -96,9 +96,9 @@ class _AllListingsState extends State<AllListings> {
                                 RichText(
                                     textScaleFactor: 1,
                                     text:
-                                        TextSpan(text: '${state.allListingResponse.course![index].crs_amount} ', style: GoogleFonts.mulish(fontSize: 17, fontWeight: FontWeight.bold, color: AppColor.primaryColor), children: [
+                                        TextSpan(text: '${state.allListingResponse.course![index].crs_amount != '0'?state.allListingResponse.course![index].crs_amount:'Free'} ', style: GoogleFonts.mulish(fontSize: 17, fontWeight: FontWeight.bold, color: AppColor.primaryColor), children: [
                                       TextSpan(
-                                        text: state.allListingResponse.course![index].crs_amount,
+                                        text: '',
                                         style: GoogleFonts.mulish(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
@@ -118,7 +118,7 @@ class _AllListingsState extends State<AllListings> {
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () {
-                                        pushNewScreen(context, screen:  ListingDetail(title: state.allListingResponse.course![index].crs_short_name.toString(),type:'all',course: state.allListingResponse.course,), withNavBar: false, pageTransitionAnimation: PageTransitionAnimation.fade);
+                                        pushNewScreen(context, screen:  ListingDetail(title: state.allListingResponse.course![index].crs_short_name.toString(),subtitle: state.allListingResponse.course![index].crs_name.toString(),type:'all',course: state.allListingResponse.course, id: state.allListingResponse.course![index].crs_id.toString(),), withNavBar: false, pageTransitionAnimation: PageTransitionAnimation.fade);
                                       },
                                       child: Row(
                                         children: [

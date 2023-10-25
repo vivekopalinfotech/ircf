@@ -7,10 +7,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
+import 'package:ircf/cubit/all_listings/all_listings_cubit.dart';
+import 'package:ircf/cubit/all_listings/all_listings_state.dart';
 import 'package:ircf/cubit/course_category/course_category_cubit.dart';
 import 'package:ircf/cubit/course_category/course_category_state.dart';
 import 'package:ircf/cubit/course_module/course_module_cubit.dart';
 import 'package:ircf/cubit/course_module/course_module_state.dart';
+import 'package:ircf/model/all_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/screens/home/listing_detail.dart';
 import 'package:ircf/screens/home/popular_courses.dart';
@@ -37,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     _pageController = PageController();
     BlocProvider.of<CourseCategoryCubit>(context).courseCategory();
-    BlocProvider.of<CourseModuleCubit>(context).courseModule();
+    BlocProvider.of<AllListingCubit>(context).allListing();
     super.initState();
   }
 
@@ -271,12 +274,12 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 18,
               ),
-              BlocConsumer<CourseModuleCubit, CourseModuleState>(listener: (context, state) async {
-                if (state is CourseModuleSuccess) {}
-                if (state is CourseModuleError) {}
-              }, builder: (context, state) {
-                if (state is CourseModuleSuccess) {
-                  return SizedBox(height: 250, child: ListView(scrollDirection: Axis.horizontal, children: _getCards(state.courseModuleResponse,)));
+          BlocConsumer<AllListingCubit, AllListingState>(listener: (context, state) async {
+            if (state is AllListingSuccess) {}
+            if (state is AllListingError) {}
+          }, builder: (context, state) {
+            if (state is AllListingSuccess) {
+              return SizedBox(height: 270, child: ListView(scrollDirection: Axis.horizontal, children: _getCards(state.allListingResponse.course!.length)));
                 }
                 return AppConstants.LOADER;
               }),
@@ -352,9 +355,7 @@ class _DashboardState extends State<Dashboard> {
     return widgets;
   }
 
-  _getCards(
-    CourseModuleResponse? courseModuleResponse,
-  ) {
+  _getCards( int length) {
     List<Widget> widgets = [];
     widgets.add(
       Card(
@@ -365,7 +366,7 @@ class _DashboardState extends State<Dashboard> {
           color: Colors.white,
           child: Container()),
     );
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < length; i++) {
       widgets.add(
         Card(
           margin: const EdgeInsets.fromLTRB(16, 0, 0, 5),
@@ -373,99 +374,110 @@ class _DashboardState extends State<Dashboard> {
           clipBehavior: Clip.antiAlias,
           shape: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
           color: Colors.white,
-          child: Column(
+          child:BlocConsumer<AllListingCubit, AllListingState>(listener: (context, state) async {
+            if (state is AllListingSuccess) {}
+            if (state is AllListingError) {}
+          }, builder: (context, state) {
+            if (state is AllListingSuccess) {
+              return InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: (){
+                  pushNewScreen(context,
+                      screen: ListingDetail( title: state.allListingResponse.course![i].crs_name,subtitle: state.allListingResponse.course![i].crs_short_name,course: state.allListingResponse.course, id: state.allListingResponse.course![i].crs_id.toString(), ),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.fade);
+                },
+                child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 134,
-                width: MediaQuery.of(context).size.width * .72,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)),
-                    // image: DecorationImage(
-                    //   image: AssetImage('assets/images/OFFER.png'),
-                    //   fit: BoxFit.cover,
-                    // ),
-                    color: Colors.black),
-              ),
-              BlocConsumer<CourseModuleCubit, CourseModuleState>(listener: (context, state) async {
-                if (state is CourseModuleSuccess) {}
-                if (state is CourseModuleError) {}
-              }, builder: (context, state) {
-                if (state is CourseModuleSuccess) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * .72,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              courseModuleResponse!.course!.crs_name.toString(),
-                              textScaleFactor: 1,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
-                            ),
-                            const SaveWidget(
-                              favdata: false,
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 7,
-                        ),
-                        Text(
-                          courseModuleResponse.course!.crs_short_name.toString(),
-                          textScaleFactor: 1,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const SizedBox(),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () {
-                                pushNewScreen(context,
-                                    screen: ListingDetail(courseModule: state.courseModuleResponse.course_module!, title: state.courseModuleResponse.course!.crs_name, ),
-                                    withNavBar: false,
-                                    pageTransitionAnimation: PageTransitionAnimation.fade);
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'VIEW ',
-                                    textScaleFactor: 1,
-                                    style: GoogleFonts.mulish(color: AppColor.primaryColor, fontWeight: FontWeight.bold, fontSize: AppConstants.XSMALL),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 14,
-                                    color: AppColor.primaryColor,
-                                  )
-                                ],
+                Container(
+                  height: 134,
+                  width: MediaQuery.of(context).size.width * .72,
+                  decoration:  BoxDecoration(
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)),
+                      image: DecorationImage(
+                        image: NetworkImage('${AppConstants.IMAGE_URL}${state.allListingResponse.course![i].crs_image}'),
+                        fit: BoxFit.contain,
+                      ),
+                      ),
+
+                ),
+                 Container(
+                      width: MediaQuery.of(context).size.width * .72,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                state.allListingResponse.course![i].crs_short_name.toString(),
+                                textScaleFactor: 1,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
                               ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                }
-                return AppConstants.LOADER;
-              }),
+                              const SaveWidget(
+                                favdata: false,
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          Text(
+                            state.allListingResponse.course![i].crs_name.toString(),
+                            textScaleFactor: 1,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(),
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () {
+                                  pushNewScreen(context,
+                                      screen: ListingDetail( title: state.allListingResponse.course![i].crs_name,subtitle: state.allListingResponse.course![i].crs_short_name,course: state.allListingResponse.course, id: state.allListingResponse.course![i].crs_id.toString(), ),
+                                      withNavBar: false,
+                                      pageTransitionAnimation: PageTransitionAnimation.fade);
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'VIEW ',
+                                      textScaleFactor: 1,
+                                      style: GoogleFonts.mulish(color: AppColor.primaryColor, fontWeight: FontWeight.bold, fontSize: AppConstants.XSMALL),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 14,
+                                      color: AppColor.primaryColor,
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    )
             ],
           ),
+              );
+            }
+            return AppConstants.LOADER;
+          }),
         ),
       );
     }

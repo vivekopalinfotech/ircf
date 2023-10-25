@@ -10,14 +10,18 @@ import 'package:ircf/cubit/course_category/course_category_cubit.dart';
 import 'package:ircf/cubit/course_listing/course_listing_cubit.dart';
 import 'package:ircf/cubit/course_module/course_module_cubit.dart';
 import 'package:ircf/cubit/login/login_cubit.dart';
+import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_course_cubit.dart';
+import 'package:ircf/cubit/payment/payment_cubit.dart';
 import 'package:ircf/cubit/register/register_cubit.dart';
 import 'package:ircf/main_screen.dart';
 import 'package:ircf/screens/login/onboarding_screen.dart';
 import 'package:ircf/service/repo/ircf_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 String token = "";
 String login = "";
+String userId = "";
 
 Future<void> main() async {
 
@@ -34,7 +38,11 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
+    getData() async {
+      SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+      var login = sharedPreference.getString("login");
+      return login;
+    }
     final repository = IrcfRepository();
    return MultiBlocProvider(
        providers: [
@@ -59,6 +67,12 @@ class MyApp extends StatelessWidget {
          BlocProvider(
            create: (context) => LoginCubit(repository),
          ),
+         BlocProvider(
+           create: (context) => PaymentCubit(repository),
+         ),
+         BlocProvider(
+           create: (context) => OngoingMyCoursesCubit(repository),
+         ),
        ],
        child: Sizer(builder: (context, orientation, deviceType) {
          return MaterialApp(
@@ -70,7 +84,7 @@ class MyApp extends StatelessWidget {
                textSelectionTheme: TextSelectionThemeData(cursorColor: AppColor.primaryColor),
              ),
              themeMode: ThemeMode.system,
-             home: login == "true"
+             home: getData() == "true"
                  ? const MainScreen(
                redirectPageName: "home",
              )

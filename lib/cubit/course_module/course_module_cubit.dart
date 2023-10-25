@@ -11,11 +11,11 @@ class CourseModuleCubit extends  Cubit<CourseModuleState>{
   CourseModuleCubit(this._repository) : super(CourseModuleInitial());
 
 
-  Future<void> courseModule() async {
+  Future<void> courseModule(String id) async {
     try {
 
 
-      CourseModuleResponse courseModuleResponse = await _repository.courseModule();
+      CourseModuleResponse courseModuleResponse = await _repository.courseModule(id);
 
       emit(CourseModuleSuccess(courseModuleResponse));
 

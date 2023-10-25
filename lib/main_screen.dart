@@ -70,6 +70,11 @@ class MainScreenState extends State<MainScreen> {
         token = value.toString();
       });
     });
+    PreferenceData.getData('user_id').then((value) {
+      setState(() {
+        userId = value.toString();
+      });
+    });
 
   }
   List<Widget> _buildScreens() {

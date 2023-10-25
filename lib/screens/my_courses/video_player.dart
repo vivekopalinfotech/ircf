@@ -70,10 +70,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/widgets/title_bar.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
+  final String url;
+  final  title;
+
+  const VideoPlayerScreen({super.key, required this.url, this.title});
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
@@ -81,20 +86,21 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
-  bool isFullScreen = false;
+
   @override
   void initState() {
     super.initState();
-    _videoPlayerController = VideoPlayerController.network(
-      'https://samplelib.com/lib/preview/mp4/sample-10s.mp4',
+    _videoPlayerController = VideoPlayerController.networkUrl(
+      Uri.parse('${AppConstants.VIDEO_URL}${widget.url}'),
     );
-    isFullScreen = true;
+
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       autoPlay: true,
       looping: false,
-      fullScreenByDefault: isFullScreen,
-      allowFullScreen: isFullScreen,
+      fullScreenByDefault: true,
+      allowFullScreen: true,
+
       autoInitialize: true
     );
   }
@@ -133,7 +139,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           color: Colors.white,
                         )),
                     Text(
-                      ' Demo',
+                      '${widget.title}',
                       style: GoogleFonts.jost(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 21),
                     )
                   ],
