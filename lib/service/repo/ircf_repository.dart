@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches
+// ignore_for_file: empty_catches, deprecated_member_use
 
 import 'dart:convert';
 import 'dart:developer';
@@ -11,6 +11,7 @@ import 'package:ircf/model/course_category_response.dart';
 import 'package:ircf/model/course_listing_response.dart';
 import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/model/my_courses_response.dart';
+import 'package:ircf/model/next_module_model.dart';
 import 'package:ircf/model/user_response.dart';
 import 'package:ircf/utils/preferences_data.dart';
 
@@ -68,6 +69,8 @@ class IrcfRepository {
       throw e.toString();
     }
   }
+
+
 
   Future<RegisterResponse> register(
       String ppl_name,
@@ -156,6 +159,20 @@ class IrcfRepository {
       throw e.toString();
     }
   }
+  Future<MyCoursesResponse> updateMyCourses(String id, String studentId) async {
+    try {
+      deviceToken = await getDeviceToken();
+      final response = await dio.get(
+        "https://cprinew.cprindia.in/api/course_student/$id/$studentId",
+      );
+      log(jsonEncode(response.data));
+      return MyCoursesResponse.fromJson(response.data);
+    } on DioError catch (e) {
+      throw e.response!.data['message'];
+    } catch (e) {
+      throw e.toString();
+    }
+  }
   Future<String> checkMobile(String mobile) async {
     FormData data = FormData();
 
@@ -174,6 +191,31 @@ class IrcfRepository {
       }
       log(jsonEncode(response.data));
       return response.data['message'];
+
+    } on DioError catch (e) {
+      //print(e);
+      throw e.response!.data['message'];
+    } catch (e) {
+      //print(e);
+      throw e.toString();
+    }
+  }
+
+  Future<NextModuleResponse> nextModule(String student_id,String module_id) async {
+    FormData data = FormData();
+
+    data = FormData.fromMap({
+      "student_id": student_id,
+      "module_id": module_id,
+    });
+    try {
+      final response = await dio.post(
+        "https://cprinew.cprindia.in/api/course_student_store",
+        data: data,
+      );
+
+      log(jsonEncode(response.data));
+      return NextModuleResponse.fromJson(response.data);
 
     } on DioError catch (e) {
       //print(e);

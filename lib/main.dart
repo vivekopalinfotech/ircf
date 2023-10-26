@@ -10,9 +10,11 @@ import 'package:ircf/cubit/course_category/course_category_cubit.dart';
 import 'package:ircf/cubit/course_listing/course_listing_cubit.dart';
 import 'package:ircf/cubit/course_module/course_module_cubit.dart';
 import 'package:ircf/cubit/login/login_cubit.dart';
+import 'package:ircf/cubit/next_module/next_module_cubit.dart';
 import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_course_cubit.dart';
 import 'package:ircf/cubit/payment/payment_cubit.dart';
 import 'package:ircf/cubit/register/register_cubit.dart';
+import 'package:ircf/cubit/update_my_courses/update_my_courses_cubit.dart';
 import 'package:ircf/main_screen.dart';
 import 'package:ircf/screens/login/onboarding_screen.dart';
 import 'package:ircf/service/repo/ircf_repository.dart';
@@ -72,6 +74,12 @@ class MyApp extends StatelessWidget {
          ),
          BlocProvider(
            create: (context) => OngoingMyCoursesCubit(repository),
+         ),
+         BlocProvider(
+           create: (context) => NextModuleCubit(repository),
+         ),
+         BlocProvider(
+           create: (context) => UpdateMyCoursesCubit(repository),
          ),
        ],
        child: Sizer(builder: (context, orientation, deviceType) {

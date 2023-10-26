@@ -143,7 +143,10 @@ import 'package:ircf/screens/my_courses/completed.dart';
 import 'package:ircf/screens/my_courses/ongoing.dart';
 
 class MyCourses extends StatefulWidget {
-  const MyCourses({super.key});
+  final type;
+  final studentId;
+  final id;
+  const MyCourses({super.key, this.type, this.studentId, this.id});
 
   @override
   State<MyCourses> createState() => _MyCoursesState();
@@ -218,9 +221,9 @@ class _MyCoursesState extends State<MyCourses> {
                         ),
                       )
                     ]),
-                    const Expanded(
+                     Expanded(
                       child: TabBarView(children: [
-                        Ongoing(),
+                        Ongoing(type: widget.type,studentId: widget.studentId.toString(),id:widget.id),
                         Completed(),
 
                       ]),

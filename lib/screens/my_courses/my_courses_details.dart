@@ -15,6 +15,7 @@ import 'package:ircf/screens/home/detail_tabs.dart';
 import 'package:http/http.dart' as http;
 import 'package:ircf/screens/my_courses/final_exam.dart';
 import 'package:ircf/screens/my_courses/video_player.dart';
+import 'package:ircf/utils/module_count.dart';
 import 'package:ircf/widgets/show_snackbar.dart';
 import 'package:ircf/widgets/title_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -23,7 +24,8 @@ import 'package:url_launcher/url_launcher.dart';
 class MyCoursesDetail extends StatefulWidget {
   final String type;
   final id;
-  const MyCoursesDetail({super.key, required this.type, this.id});
+  final studentId;
+  const MyCoursesDetail({super.key, required this.type, this.id, this.studentId});
 
   @override
   State<MyCoursesDetail> createState() => _MyCoursesDetailState();
@@ -70,7 +72,10 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                   height: 18,
                 ),
                 BlocConsumer<CourseModuleCubit, CourseModuleState>(listener: (context, state) async {
-                  if (state is CourseModuleSuccess) {}
+                  if (state is CourseModuleSuccess) {
+                    var s1 = AppBadge();
+                     s1.BadgeUpdate(state.courseModuleResponse.course_module?.length??0);
+                  }
                   if (state is CourseModuleError) {}
                 }, builder: (context, state) {
                   if (state is CourseModuleSuccess) {
@@ -206,6 +211,73 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                         ),
                                                       );
                                                     },),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  state.courseModuleResponse.course_module![index].main_module!.course_question!.isNotEmpty?
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        'Exam: ',
+                                                        style: GoogleFonts.jost(fontWeight: FontWeight.w500, fontSize: AppConstants.SMALL, color: AppColor.progressColor),
+                                                      ),
+                                                      const SizedBox(height: 8,),
+                                                      SizedBox(
+                                                        height: 40,
+                                                        width: MediaQuery.of(context).size.width,
+                                                        child: ElevatedButton(
+                                                            style: ButtonStyle(
+                                                                padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 8)),
+                                                                backgroundColor: MaterialStatePropertyAll<Color>(AppColor.primary75),
+                                                                elevation: const MaterialStatePropertyAll(0),
+                                                                shape: MaterialStatePropertyAll(
+                                                                  RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(60),
+                                                                  ),
+                                                                )),
+
+                                                            onPressed: () {
+                                                              pushNewScreen(context, screen:  FinalExam(question: state.courseModuleResponse.course_module![index].main_module!.course_question!,
+                                                                  studentId: widget.studentId.toString(),
+                                                                  moduleId: state.courseModuleResponse.course_module![index].main_module!.module_id.toString(),
+                                                                  id:widget.id), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
+                                                            },
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                const SizedBox(
+                                                                  width: 40,
+                                                                ),
+                                                                Center(
+                                                                  child: Text(
+                                                                    'Start exam',
+                                                                    textScaleFactor: 1,
+                                                                    style: GoogleFonts.jost(color: Colors.white, fontSize: AppConstants.LARGE, fontWeight: FontWeight.w500),
+                                                                  ),
+                                                                ),
+
+                                                                Align(
+                                                                  alignment: Alignment.centerRight,
+                                                                  child: Container(
+                                                                    height: 28,
+                                                                    width: 28,
+                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: Colors.white),
+                                                                    child: Center(
+                                                                        child: Icon(
+                                                                          CupertinoIcons.arrow_right,
+                                                                          size: 20,
+                                                                          color: AppColor.primaryColor,
+                                                                        )),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ),
+
+                                                    ],
+                                                  ):const SizedBox(),
+
                                                 ],
                                               ),
                                         ListView.separated(
@@ -344,7 +416,68 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                               color: Colors.grey,
                                                             ),
                                                           );
-                                                    },)
+                                                    },),
+
+                                                    state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].course_question!.isNotEmpty?
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          'Exam: ',
+                                                          style: GoogleFonts.jost(fontWeight: FontWeight.w500, fontSize: AppConstants.SMALL, color: AppColor.progressColor),
+                                                        ),
+                                                        const SizedBox(height: 8,),
+                                                        SizedBox(
+                                                          height: 40,
+                                                          width: MediaQuery.of(context).size.width,
+                                                          child: ElevatedButton(
+                                                              style: ButtonStyle(
+                                                                  padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 8)),
+                                                                  backgroundColor: MaterialStatePropertyAll<Color>(AppColor.primary75),
+                                                                  elevation: const MaterialStatePropertyAll(0),
+                                                                  shape: MaterialStatePropertyAll(
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(60),
+                                                                    ),
+                                                                  )),
+
+                                                              onPressed: () {
+                                                                pushNewScreen(context, screen:  FinalExam(question: state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].course_question!,studentId : widget.studentId.toString(),moduleId: state.courseModuleResponse.course_module![index].main_module!.module_id.toString(),id:widget.id), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
+                                                              },
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    width: 40,
+                                                                  ),
+                                                                  Center(
+                                                                    child: Text(
+                                                                      'Start exam',
+                                                                      textScaleFactor: 1,
+                                                                      style: GoogleFonts.jost(color: Colors.white, fontSize: AppConstants.LARGE, fontWeight: FontWeight.w500),
+                                                                    ),
+                                                                  ),
+
+                                                                  Align(
+                                                                    alignment: Alignment.centerRight,
+                                                                    child: Container(
+                                                                      height: 28,
+                                                                      width: 28,
+                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: Colors.white),
+                                                                      child: Center(
+                                                                          child: Icon(
+                                                                            CupertinoIcons.arrow_right,
+                                                                            size: 20,
+                                                                            color: AppColor.primaryColor,
+                                                                          )),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )),
+                                                        ),
+                                                      ],
+                                                    ):const SizedBox(),
+
                                                   ],
                                                 ),
                                               ],
@@ -423,7 +556,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                     ),
                                   )),
                               onPressed: () {
-                                pushNewScreen(context, screen: const FinalExam(), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
+                                pushNewScreen(context, screen:  FinalExam(), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

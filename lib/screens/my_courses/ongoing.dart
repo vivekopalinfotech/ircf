@@ -5,12 +5,17 @@ import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_course_cubit.dart';
 import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_courses_state.dart';
+import 'package:ircf/cubit/update_my_courses/update_my_courses_cubit.dart';
 import 'package:ircf/main.dart';
 import 'package:ircf/screens/my_courses/my_courses_details.dart';
+import 'package:ircf/utils/module_count.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Ongoing extends StatefulWidget {
-  const Ongoing({super.key});
+  final type;
+  final studentId;
+  final id;
+  const Ongoing({super.key, this.type, this.studentId, this.id});
 
   @override
   State<Ongoing> createState() => _OngoingState();
@@ -34,7 +39,12 @@ class _OngoingState extends State<Ongoing> {
 
   @override
   void initState() {
-    BlocProvider.of<OngoingMyCoursesCubit>(context).ongoingMyCourses(userId);
+
+    if(widget.type == 'update'){
+      BlocProvider.of<UpdateMyCoursesCubit>(context).updateMyCourses(widget.id, widget.studentId.toString());
+    }else{
+      BlocProvider.of<OngoingMyCoursesCubit>(context).ongoingMyCourses(userId);
+    }
     super.initState();
   }
 
@@ -56,6 +66,7 @@ class _OngoingState extends State<Ongoing> {
                       pushNewScreen(context,
                           screen:  MyCoursesDetail(
                             type: 'Ongoing',id: state.myCoursesResponse.data![index].crs_id.toString(),
+                            studentId: state.myCoursesResponse.data![index].std_id.toString()
                           ),
                           withNavBar: false,
                           pageTransitionAnimation: PageTransitionAnimation.fade);
@@ -144,6 +155,10 @@ class _OngoingState extends State<Ongoing> {
           }
           return AppConstants.LOADER;
         }));
+  }
+  int BadgeItems() {
+    var s1 = AppBadge();
+    return s1.getBadgeUpdate();
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 class AppColor {
 
   static Color primaryColor = const Color.fromRGBO(74, 166, 221, 1);
+  static Color primary75 = const Color.fromRGBO(74, 166, 221, .75);
   static Color secondaryColor = const Color.fromRGBO(213, 226, 245, 1);
   static Color whiteBG = const Color.fromRGBO(245, 249, 255, 1);
   static Color textColor = const Color.fromRGBO(32, 34, 68, 1);

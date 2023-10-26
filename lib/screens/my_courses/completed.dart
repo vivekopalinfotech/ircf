@@ -35,7 +35,8 @@ class _CompletedState extends State<Completed> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColor.whiteBG,
-        body: ListView.builder(
+        body: const SizedBox()
+        /*ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 17),
             itemCount: filterCat.length,
             itemBuilder: (context,index){
@@ -149,7 +150,7 @@ class _CompletedState extends State<Completed> {
                       child: SvgPicture.asset('assets/images/completed.svg'))
                 ],
               );
-            })
+            })*/
     );
   }
 }
