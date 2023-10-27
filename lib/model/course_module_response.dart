@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:ircf/utils/module_count.dart';
+
 
 class CourseModuleResponse {
   final int? code;
@@ -14,7 +14,6 @@ class CourseModuleResponse {
     this.course,
     this.course_module,
   });
-   var s1 = AppBadge();
 
   CourseModuleResponse.fromJson(Map<String, dynamic> json)
       : code = json['code'] as int?,
@@ -92,6 +91,7 @@ class MainModule {
   final int? module_id;
   final int? course_id;
   final int? parent_id;
+  final int? is_complete;
   final String? module_title;
   final List<CoursePdf>? course_pdfs;
   final List<CourseVideos>? course_videos;
@@ -102,6 +102,7 @@ class MainModule {
     this.module_id,
     this.course_id,
     this.parent_id,
+    this.is_complete,
     this.module_title,
     this.course_pdfs,
     this.course_videos,
@@ -113,6 +114,7 @@ class MainModule {
       : module_id = json['module_id'] as int?,
         course_id = json['course_id'] as int?,
         parent_id = json['parent_id'] as int?,
+        is_complete = json['is_complete'] as int?,
         module_title = json['module_title'] as String?,
         course_pdfs = (json['course_pdfs'] as List?)?.map((dynamic e) => CoursePdf.fromJson(e as Map<String, dynamic>)).toList(),
         course_videos = (json['course_videos'] as List?)?.map((dynamic e) => CourseVideos.fromJson(e as Map<String, dynamic>)).toList(),
@@ -123,6 +125,7 @@ class MainModule {
         'module_id': module_id,
         'course_id': course_id,
         'parent_id': parent_id,
+        'is_complete': is_complete,
         'module_title': module_title,
         'course_pdfs': course_pdfs?.map((e) => e.toJson()).toList(),
         'course_videos': course_videos?.map((e) => e.toJson()).toList(),
@@ -181,6 +184,7 @@ class SubModule {
   final int? module_id;
   final int? course_id;
   final int? parent_id;
+  final int? is_complete;
   final String? module_title;
   final List<CoursePdf>? course_pdfs;
   final List<CourseQuestion>? course_question;
@@ -190,6 +194,7 @@ class SubModule {
     this.module_id,
     this.course_id,
     this.parent_id,
+    this.is_complete,
     this.module_title,
     this.course_pdfs,
     this.course_question,
@@ -200,6 +205,7 @@ class SubModule {
       : module_id = json['module_id'] as int?,
         course_id = json['course_id'] as int?,
         parent_id = json['parent_id'] as int?,
+        is_complete = json['is_complete'] as int?,
         module_title = json['module_title'] as String?,
         course_pdfs = (json['course_pdfs'] as List?)?.map((dynamic e) => CoursePdf.fromJson(e as Map<String, dynamic>)).toList(),
         course_question = (json['course_question'] as List?)?.map((dynamic e) => CourseQuestion.fromJson(e as Map<String, dynamic>)).toList(),
@@ -209,6 +215,7 @@ class SubModule {
         'module_id': module_id,
         'course_id': course_id,
         'parent_id': parent_id,
+        'is_complete': is_complete,
         'module_title': module_title,
         'course_pdfs': course_pdfs?.map((e) => e.toJson()).toList(),
         'course_question': course_question?.map((e) => e.toJson()).toList(),
@@ -242,6 +249,7 @@ class CourseQuestion {
         'answer_options': answer_options?.map((e) => e.toJson()).toList(),
       };
 }
+
 class AnswerOption {
   final int? id;
   final int? que_id;
@@ -262,9 +270,9 @@ class AnswerOption {
         answer = json['answer'] as String?;
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'que_id': que_id,
-    'is_correct ': is_correct,
-    'answer': answer,
-  };
+        'id': id,
+        'que_id': que_id,
+        'is_correct ': is_correct,
+        'answer': answer,
+      };
 }

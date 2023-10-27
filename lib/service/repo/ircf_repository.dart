@@ -159,14 +159,14 @@ class IrcfRepository {
       throw e.toString();
     }
   }
-  Future<MyCoursesResponse> updateMyCourses(String id, String studentId) async {
+  Future<CourseModuleResponse> updateMyCourses(String id, String studentId) async {
     try {
       deviceToken = await getDeviceToken();
       final response = await dio.get(
         "https://cprinew.cprindia.in/api/course_student/$id/$studentId",
       );
       log(jsonEncode(response.data));
-      return MyCoursesResponse.fromJson(response.data);
+      return CourseModuleResponse.fromJson(response.data);
     } on DioError catch (e) {
       throw e.response!.data['message'];
     } catch (e) {

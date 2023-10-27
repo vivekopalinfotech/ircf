@@ -40,11 +40,8 @@ class _OngoingState extends State<Ongoing> {
   @override
   void initState() {
 
-    if(widget.type == 'update'){
-      BlocProvider.of<UpdateMyCoursesCubit>(context).updateMyCourses(widget.id, widget.studentId.toString());
-    }else{
       BlocProvider.of<OngoingMyCoursesCubit>(context).ongoingMyCourses(userId);
-    }
+
     super.initState();
   }
 

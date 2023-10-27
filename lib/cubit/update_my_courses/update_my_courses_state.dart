@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/cupertino.dart';
+import 'package:ircf/model/course_module_response.dart';
 import 'package:ircf/model/my_courses_response.dart';
 import 'package:ircf/model/next_module_model.dart';
 import 'package:ircf/model/user_response.dart';
@@ -13,9 +14,9 @@ abstract class UpdateMyCoursesState {}
 class UpdateMyCoursesInitial extends UpdateMyCoursesState {}
 
 class UpdateMyCoursesSuccess extends UpdateMyCoursesState {
-  final  MyCoursesResponse updateMyCoursesResponse;
+  final  CourseModuleResponse courseModuleResponse;
 
-  UpdateMyCoursesSuccess(this.updateMyCoursesResponse);
+  UpdateMyCoursesSuccess(this.courseModuleResponse);
 }
 
 

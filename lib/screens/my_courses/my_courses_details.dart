@@ -11,6 +11,8 @@ import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/cubit/course_module/course_module_cubit.dart';
 import 'package:ircf/cubit/course_module/course_module_state.dart';
+import 'package:ircf/cubit/update_my_courses/update_my_courses_cubit.dart';
+import 'package:ircf/cubit/update_my_courses/update_my_courses_state.dart';
 import 'package:ircf/screens/home/detail_tabs.dart';
 import 'package:http/http.dart' as http;
 import 'package:ircf/screens/my_courses/final_exam.dart';
@@ -32,28 +34,14 @@ class MyCoursesDetail extends StatefulWidget {
 }
 
 class _MyCoursesDetailState extends State<MyCoursesDetail> {
-  List<Curriculcum> item = [
-    Curriculcum('01', 'Chapter - 1', '15 Mins'),
-    Curriculcum('02', 'Chapter - 2', '10 Mins'),
-  ];
 
-  List<Curriculcum> item1 = [
-    Curriculcum('03', 'Chapter - 1', '08 Mins'),
-    Curriculcum('04', 'Chapter - 2', '25 Mins'),
-    Curriculcum('05', 'Chapter - 2', '12 Mins'),
-    Curriculcum('06', 'Chapter - 2', '10 Mins'),
-  ];
-
-  List<Curriculcum> item2 = [
-    Curriculcum('07', 'Chapter - 1', '15 Mins'),
-    Curriculcum('08', 'Chapter - 2', '30 Mins'),
-    Curriculcum('09', 'Chapter - 2', '42 Mins'),
-  ];
 
   @override
   void initState() {
-    BlocProvider.of<CourseModuleCubit>(context).courseModule(widget.id);
     super.initState();
+    BlocProvider.of<UpdateMyCoursesCubit>(context).updateMyCourses(widget.id.toString(), widget.studentId.toString());
+    print(widget.id);
+    print(widget.studentId);
   }
 
   @override
@@ -71,14 +59,13 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                 const SizedBox(
                   height: 18,
                 ),
-                BlocConsumer<CourseModuleCubit, CourseModuleState>(listener: (context, state) async {
-                  if (state is CourseModuleSuccess) {
-                    var s1 = AppBadge();
-                     s1.BadgeUpdate(state.courseModuleResponse.course_module?.length??0);
+                BlocConsumer<UpdateMyCoursesCubit, UpdateMyCoursesState>(listener: (context, state) async {
+                  if (state is UpdateMyCoursesSuccess) {
+
                   }
-                  if (state is CourseModuleError) {}
+                  if (state is UpdateMyCoursesError) {}
                 }, builder: (context, state) {
-                  if (state is CourseModuleSuccess) {
+                  if (state is UpdateMyCoursesSuccess) {
                     return Expanded(
                         child: SingleChildScrollView(
                       child: Column(
@@ -137,6 +124,9 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                     shrinkWrap: true,
                                                     physics: const NeverScrollableScrollPhysics(),
                                                     itemBuilder: (context, index1) {
+                                                      print('mainModule:  $index --> is_complete ---> ${state.courseModuleResponse.course_module![index].main_module!.is_complete}');
+
+
                                                       return Padding(
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: Row(
@@ -149,7 +139,8 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                 style: GoogleFonts.jost(fontWeight: FontWeight.w500, fontSize: AppConstants.SMALL, color: AppColor.textColor),
                                                               ),
                                                             ),
-                                                            InkWell(
+
+                                                            state.courseModuleResponse.course_module![index].main_module!.is_complete == 1  ?  InkWell(
                                                                 splashColor: Colors.transparent,
                                                                 highlightColor: Colors.transparent,
                                                                 onTap: () {
@@ -161,7 +152,8 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                       pageTransitionAnimation: PageTransitionAnimation.fade,
                                                                       withNavBar: false);
                                                                 },
-                                                                child: SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/watch.svg'))),
+                                                                child: SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/watch.svg')))
+                                                                : SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/lock.svg')),
                                                           ],
                                                         ),
                                                       );
@@ -193,7 +185,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                 style: GoogleFonts.jost(fontWeight: FontWeight.w500, fontSize: AppConstants.SMALL, color: AppColor.textColor),
                                                               ),
                                                             ),
-                                                            InkWell(
+                                                            state.courseModuleResponse.course_module![index].main_module!.is_complete == 1  ?  InkWell(
                                                               splashColor: Colors.transparent,
                                                               highlightColor: Colors.transparent,
                                                               onTap: () {
@@ -206,7 +198,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                     Icons.picture_as_pdf_outlined,
                                                                     color: AppColor.primaryColor,
                                                                   )),
-                                                            ),
+                                                            ):SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/lock.svg')),
                                                           ],
                                                         ),
                                                       );
@@ -214,7 +206,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                   const SizedBox(
                                                     height: 8,
                                                   ),
-                                                  state.courseModuleResponse.course_module![index].main_module!.course_question!.isNotEmpty?
+                                                  state.courseModuleResponse.course_module![index].main_module!.is_complete == 1?
                                                   Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
@@ -329,6 +321,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                         shrinkWrap: true,
                                                         physics: const NeverScrollableScrollPhysics(),
                                                         itemBuilder: (context, index2) {
+                                                          print('subModule:  $index1 --> is_complete ---> ${state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].is_complete}');
                                                           return Padding(
                                                             padding: const EdgeInsets.all(8.0),
                                                             child: Row(
@@ -341,6 +334,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                     style: GoogleFonts.jost(fontWeight: FontWeight.w500, fontSize: AppConstants.SMALL, color: AppColor.textColor),
                                                                   ),
                                                                 ),
+                                                                state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].is_complete == 1?
                                                                 InkWell(
                                                                     splashColor: Colors.transparent,
                                                                     highlightColor: Colors.transparent,
@@ -355,7 +349,8 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                           pageTransitionAnimation: PageTransitionAnimation.fade,
                                                                           withNavBar: false);
                                                                     },
-                                                                    child: SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/watch.svg'))),
+                                                                    child: SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/watch.svg'))):
+                                                          SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/lock.svg')),
                                                               ],
                                                             ),
                                                           );
@@ -399,13 +394,15 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                             onTap: () {
                                                               _openUrl('${AppConstants.VIDEO_URL}${state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].course_pdfs![index2].course_pdf}');
                                                             },
-                                                            child: SizedBox(
+                                                            child:
+                                                            state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].is_complete == 1?
+                                                            SizedBox(
                                                                 height: 20,
                                                                 width: 20,
                                                                 child: Icon(
                                                                   Icons.picture_as_pdf_outlined,
                                                                   color: AppColor.primaryColor,
-                                                                )),
+                                                                )):SizedBox(height: 20, width: 20, child: SvgPicture.asset('assets/images/lock.svg')),
                                                         ),
                                                       ],
                                                     ),
@@ -418,7 +415,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                           );
                                                     },),
 
-                                                    state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].course_question!.isNotEmpty?
+                                                    state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].is_complete! == 1?
                                                     Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
@@ -442,7 +439,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                                                                   )),
 
                                                               onPressed: () {
-                                                                pushNewScreen(context, screen:  FinalExam(question: state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].course_question!,studentId : widget.studentId.toString(),moduleId: state.courseModuleResponse.course_module![index].main_module!.module_id.toString(),id:widget.id), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
+                                                                pushNewScreen(context, screen:  FinalExam(question: state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].course_question!,studentId : widget.studentId.toString(),moduleId: state.courseModuleResponse.course_module![index].main_module!.sub_module![index1].module_id.toString(),id:widget.id), pageTransitionAnimation: PageTransitionAnimation.fade, withNavBar: false);
                                                               },
                                                               child: Row(
                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
