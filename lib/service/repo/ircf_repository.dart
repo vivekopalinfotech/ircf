@@ -147,7 +147,6 @@ class IrcfRepository {
         data: data,
       );
 
-
       log(jsonEncode(response.data));
       return MyCoursesResponse.fromJson(response.data);
 

@@ -1,5 +1,7 @@
 class MyCoursesResponse {
   final int? code;
+  final int? total_complete_count;
+  final int? total_module_count;
   final bool? success;
 
   final List<Data>? data;
@@ -7,20 +9,25 @@ class MyCoursesResponse {
   MyCoursesResponse({
     this.code,
     this.success,
+    this.total_complete_count,
+    this.total_module_count,
 
     this.data,
   });
 
   MyCoursesResponse.fromJson(Map<String, dynamic> json)
       : code = json['code'] as int?,
+        total_complete_count = json['total_complete_count'] as int?,
+        total_module_count = json['total_module_count'] as int?,
         success = json['success'] as bool?,
-
         data = (json['data'] as List?)
             ?.map((dynamic e) => Data.fromJson(e as Map<String, dynamic>))
             .toList();
 
   Map<String, dynamic> toJson() => {
     'code' : code,
+    'total_complete_count' : total_complete_count,
+    'total_module_count' : total_module_count,
     'success' : success,
     'data' : data?.map((e) => e.toJson()).toList()
   };

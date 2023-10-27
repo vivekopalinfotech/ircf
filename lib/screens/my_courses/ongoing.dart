@@ -53,12 +53,17 @@ class _OngoingState extends State<Ongoing> {
           if (state is OngoingMyCoursesSuccess) {}
           if (state is OngoingMyCoursesError) {}
         }, builder: (context, state) {
+
           if (state is OngoingMyCoursesSuccess) {
             return ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING, vertical: 17),
                 itemCount: state.myCoursesResponse.data!.length,
                 itemBuilder: (context, index) {
+                  var value;
+                  value = 0.0;
                   return InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     onTap: () {
                       pushNewScreen(context,
                           screen:  MyCoursesDetail(
@@ -79,7 +84,7 @@ class _OngoingState extends State<Ongoing> {
                               height: 130,
                               width: 130,
                               decoration:  BoxDecoration(
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(16),
                                     bottomLeft: Radius.circular(16),
                                   ),
@@ -129,7 +134,7 @@ class _OngoingState extends State<Ongoing> {
                                           child: LinearProgressIndicator(
                                             backgroundColor: AppColor.whiteBG,
                                             valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
-                                            value: filterCat[index].value,
+                                            value: value,
                                           ),
                                         ),
                                       ),
@@ -137,7 +142,7 @@ class _OngoingState extends State<Ongoing> {
                                         width: 18,
                                       ),
                                       Text(
-                                        '${(filterCat[index].progressValue).round()}/${(filterCat[index].totalValue).round()}',
+                                        '${(state.myCoursesResponse.total_complete_count)}/${state.myCoursesResponse.total_module_count}',
                                         style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
                                       ),
                                     ],
