@@ -383,7 +383,6 @@ class _PopularCoursesState extends State<PopularCourses> {
                           automaticIndicatorColorAdjustment: true,
                           unselectedLabelStyle: GoogleFonts.mulish(color: Colors.black, fontStyle: FontStyle.normal, fontSize: 13, fontWeight: FontWeight.bold),
                           tabs: allTabs
-
                         ),
                         isShow == true
                             ? Padding(
@@ -400,6 +399,9 @@ class _PopularCoursesState extends State<PopularCourses> {
                                       data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                                       child: TextFormField(
                                         keyboardType: TextInputType.text,
+                                        onFieldSubmitted: (value) {
+
+                                        },
                                         controller: searchController,
                                         autofocus: false,
                                         style: GoogleFonts.montserrat(
@@ -408,7 +410,7 @@ class _PopularCoursesState extends State<PopularCourses> {
                                           fontSize: AppConstants.SMALL,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        textInputAction: TextInputAction.next,
+                                        textInputAction: TextInputAction.search,
                                         decoration: InputDecoration(
                                           hintText: 'Search Courses',
                                           hintStyle: GoogleFonts.montserrat(

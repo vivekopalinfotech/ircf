@@ -15,6 +15,7 @@ import 'package:ircf/screens/home/curriculum.dart';
 import 'package:ircf/screens/home/detail_tabs.dart';
 import 'package:ircf/screens/home/widget/detail_widget.dart';
 import 'package:ircf/screens/payment/payment.dart';
+import 'package:ircf/utils/loader.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class ListingDetail extends StatefulWidget {
@@ -43,7 +44,7 @@ class _ListingDetailState extends State<ListingDetail> {
   Widget build(BuildContext context) {
     return BlocConsumer<CourseModuleCubit, CourseModuleState>(listener: (context, state) async {
       if (state is CourseModuleSuccess) {}
-      if (state is CourseModuleError) {}
+
     }, builder: (context, state) {
       if (state is CourseModuleSuccess) {
         return DefaultTabController(
@@ -326,6 +327,9 @@ class _ListingDetailState extends State<ListingDetail> {
                 ],
               )),
         )));
+      }
+      if (state is CourseModuleLoading) {
+        loader(context);
       }
       return AppConstants.LOADER;
     });

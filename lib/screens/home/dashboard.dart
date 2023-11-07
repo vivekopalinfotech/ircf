@@ -227,7 +227,7 @@ class _DashboardState extends State<Dashboard> {
                     padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
                     child: SizedBox(
                       height: 54,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _getListData(state.categoryResponse.course_category!)),
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: _getListData(state.categoryResponse.course_category!)),
                     ),
                   );
                 }

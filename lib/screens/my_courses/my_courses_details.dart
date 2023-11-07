@@ -14,6 +14,7 @@ import 'package:ircf/cubit/update_my_courses/update_my_courses_state.dart';
 import 'package:http/http.dart' as http;
 import 'package:ircf/screens/my_courses/final_exam.dart';
 import 'package:ircf/screens/my_courses/video_player.dart';
+import 'package:ircf/utils/loader.dart';
 import 'package:ircf/widgets/show_snackbar.dart';
 import 'package:ircf/widgets/title_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -59,7 +60,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                   if (state is UpdateMyCoursesSuccess) {
 
                   }
-                  if (state is UpdateMyCoursesError) {}
+
                 }, builder: (context, state) {
                   if (state is UpdateMyCoursesSuccess) {
                     return Expanded(
@@ -501,7 +502,7 @@ class _MyCoursesDetailState extends State<MyCoursesDetail> {
                       ),
                     ));
                   }
-                  return AppConstants.LOADER;
+                  return Expanded(child: Center(child: AppConstants.LOADER));
                 })
               ])),
           Positioned(

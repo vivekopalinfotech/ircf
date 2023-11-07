@@ -376,17 +376,7 @@ class _ProfileState extends State<Profile> {
                                           highlightColor: Colors.transparent,
                                           onTap: ()async{
 
-                                            SharedPreferences sharedPreference = await SharedPreferences.getInstance();
-                                            sharedPreference.remove('login');
-                                            sharedPreference.remove('token');
-                                            sharedPreference.clear();
-
-                                            Navigator.of(context, rootNavigator: true)
-                                                .pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                  builder: (context) => const PhoneScreen()),
-                                                  (Route<dynamic> route) => false,
-                                            );
+                                            showAlertDialog1(context);
                                           },
                                           child: Container(
                                               padding: const EdgeInsets.symmetric(vertical: 18.0),
@@ -581,5 +571,88 @@ class _ProfileState extends State<Profile> {
             ]);
           });
         });
+  }
+  void showAlertDialog1(BuildContext context) {
+    // set up the button
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel", textScaleFactor: 1,style: GoogleFonts.montserrat(color: AppColor.primaryColor,fontSize: 16),),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Logout", textScaleFactor: 1,style: GoogleFonts.montserrat(color: AppColor.primaryColor,fontSize: 16)),
+      onPressed: ()  async {
+
+        SharedPreferences sharedPreference = await SharedPreferences.getInstance();
+        sharedPreference.remove('login');
+        sharedPreference.remove('token');
+        sharedPreference.clear();
+
+        Navigator.of(context, rootNavigator: true)
+            .pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => const PhoneScreen()),
+              (Route<dynamic> route) => false,
+        );
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none
+      ),
+      backgroundColor: Colors.white,
+      titlePadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
+      title: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          color: Colors.white,
+        ),
+        padding:  EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 16),
+        child: Column(
+          children: [
+
+            const SizedBox(height: 16,),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset("assets/images/logo.png",height: 25,),
+                SizedBox(width: 15,),
+                Flexible(
+                  child: Text("Do you want to log out from the application?", textScaleFactor: 1,
+                    style: GoogleFonts.montserrat(
+                        color: Colors.black,
+                        fontSize: AppConstants.LARGE,fontWeight: FontWeight.w500
+                    ),),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                cancelButton,
+                continueButton,
+              ],
+            ),
+
+          ],
+        ),
+      ),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

@@ -98,9 +98,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       videoPlayerController: _videoPlayerController,
       autoPlay: true,
       looping: false,
-      fullScreenByDefault: true,
+      //fullScreenByDefault: true,
       allowFullScreen: true,
-
+      
       autoInitialize: true
     );
   }

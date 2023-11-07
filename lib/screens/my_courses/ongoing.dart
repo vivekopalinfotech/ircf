@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,7 +7,6 @@ import 'package:ircf/color/app_color.dart';
 import 'package:ircf/constants/app_constants.dart';
 import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_course_cubit.dart';
 import 'package:ircf/cubit/ongoing_my_courses/ongoing_my_courses_state.dart';
-import 'package:ircf/cubit/update_my_courses/update_my_courses_cubit.dart';
 import 'package:ircf/main.dart';
 import 'package:ircf/screens/my_courses/my_courses_details.dart';
 import 'package:ircf/utils/module_count.dart';
@@ -31,16 +32,43 @@ class _OngoingState extends State<Ongoing> {
   }
 
   List<Category> filterCat = [
-    Category('COLS', 'Compression-Only Life Support', 93, 125, 0.74, AppColor.tealColor, '3 Hrs 06 Mins'),
-    Category('BCLS', 'Basic Cardiopulmonary Life Support ', 12, 31, 0.38, AppColor.progressColor, '1 Hrs 58 Mins'),
-    Category('CCLS', 'Comprehensive Cardiopulmonary Life Support', 56, 98, 0.57, AppColor.activeColor, '2 Hrs 46 Mins'),
-    Category('BCLS Instructor', 'Basic Cardiopulmonary Life Support', 29, 35, 0.82, AppColor.progressColor, '1 Hrs 58 Mins'),
+    Category(
+        'COLS',
+        'Compression-Only Life Support',
+        93,
+        125,
+        0.74,
+        AppColor.tealColor,
+        '3 Hrs 06 Mins'),
+    Category(
+        'BCLS',
+        'Basic Cardiopulmonary Life Support ',
+        12,
+        31,
+        0.38,
+        AppColor.progressColor,
+        '1 Hrs 58 Mins'),
+    Category(
+        'CCLS',
+        'Comprehensive Cardiopulmonary Life Support',
+        56,
+        98,
+        0.57,
+        AppColor.activeColor,
+        '2 Hrs 46 Mins'),
+    Category(
+        'BCLS Instructor',
+        'Basic Cardiopulmonary Life Support',
+        29,
+        35,
+        0.82,
+        AppColor.progressColor,
+        '1 Hrs 58 Mins'),
   ];
 
   @override
   void initState() {
-
-      BlocProvider.of<OngoingMyCoursesCubit>(context).ongoingMyCourses(userId);
+    BlocProvider.of<OngoingMyCoursesCubit>(context).ongoingMyCourses(userId);
 
     super.initState();
   }
@@ -53,22 +81,24 @@ class _OngoingState extends State<Ongoing> {
           if (state is OngoingMyCoursesSuccess) {}
           if (state is OngoingMyCoursesError) {}
         }, builder: (context, state) {
-
           if (state is OngoingMyCoursesSuccess) {
             return ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING, vertical: 17),
                 itemCount: state.myCoursesResponse.data!.length,
                 itemBuilder: (context, index) {
                   var value;
-                  value = 0.0;
+                  var sum;
+                  sum = state.myCoursesResponse.total_complete_count!.toInt() / state.myCoursesResponse.total_module_count!.toInt();
+                  value = state.myCoursesResponse.total_complete_count!.toInt() != 0 && state.myCoursesResponse.total_module_count!.toInt() != 0 ? sum : 0.0;
+                  print(value);
                   return InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () {
                       pushNewScreen(context,
-                          screen:  MyCoursesDetail(
-                            type: 'Ongoing',id: state.myCoursesResponse.data![index].crs_id.toString(),
-                            studentId: state.myCoursesResponse.data![index].std_id.toString()
+                          screen: MyCoursesDetail(
+                              type: 'Ongoing', id: state.myCoursesResponse.data![index].crs_id.toString(),
+                              studentId: state.myCoursesResponse.data![index].std_id.toString()
                           ),
                           withNavBar: false,
                           pageTransitionAnimation: PageTransitionAnimation.fade);
@@ -83,7 +113,7 @@ class _OngoingState extends State<Ongoing> {
                             Container(
                               height: 130,
                               width: 130,
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(16),
                                     bottomLeft: Radius.circular(16),
@@ -94,62 +124,62 @@ class _OngoingState extends State<Ongoing> {
                             ),
                             Flexible(
                                 child: Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    state.myCoursesResponse.data![index].crs_short_name.toString(),
-                                    textScaleFactor: 1,
-                                    style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    state.myCoursesResponse.data![index].crs_name.toString(),
-                                    textScaleFactor: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10, bottom: 14),
-                                    child: Text(
-                                      ' ${state.myCoursesResponse.data![index].course_time.toString()}',
-                                      style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  padding: const EdgeInsets.all(14),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(),
-                                      Flexible(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            border: Border.all(color: AppColor.secondaryColor),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                                          child: LinearProgressIndicator(
-                                            backgroundColor: AppColor.whiteBG,
-                                            valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
-                                            value: value,
-                                          ),
-                                        ),
+                                      Text(
+                                        state.myCoursesResponse.data![index].crs_short_name.toString(),
+                                        textScaleFactor: 1,
+                                        style: GoogleFonts.mulish(fontSize: AppConstants.XSMALL, fontWeight: FontWeight.bold, color: AppColor.activeColor),
                                       ),
                                       const SizedBox(
-                                        width: 18,
+                                        height: 10,
                                       ),
                                       Text(
-                                        '${(state.myCoursesResponse.total_complete_count)}/${state.myCoursesResponse.total_module_count}',
-                                        style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                        state.myCoursesResponse.data![index].crs_name.toString(),
+                                        textScaleFactor: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.jost(fontSize: AppConstants.MEDIUM, fontWeight: FontWeight.w500, color: AppColor.textColor),
                                       ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10, bottom: 14),
+                                        child: Text(
+                                          ' ${state.myCoursesResponse.data![index].course_time.toString()}',
+                                          style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const SizedBox(),
+                                          Flexible(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5),
+                                                border: Border.all(color: AppColor.secondaryColor),
+                                              ),
+                                              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+                                              child: LinearProgressIndicator(
+                                                backgroundColor: AppColor.whiteBG,
+                                                valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
+                                                value: value,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 18,
+                                          ),
+                                          Text(
+                                            '${(state.myCoursesResponse.total_complete_count)}/${state.myCoursesResponse.total_module_count}',
+                                            style: GoogleFonts.mulish(fontSize: 11, fontWeight: FontWeight.bold, color: AppColor.textColor),
+                                          ),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
-                              ),
-                            ))
+                                  ),
+                                ))
                           ],
                         )),
                   );
@@ -157,10 +187,6 @@ class _OngoingState extends State<Ongoing> {
           }
           return AppConstants.LOADER;
         }));
-  }
-  int BadgeItems() {
-    var s1 = AppBadge();
-    return s1.getBadgeUpdate();
   }
 }
 

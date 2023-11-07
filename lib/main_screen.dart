@@ -136,7 +136,7 @@ class MainScreenState extends State<MainScreen> {
         icon:  SvgPicture.asset('assets/images/about.svg',color: AppColor.primaryColor,),
         iconSize: 24,
 
-        title: "LOCATE CENTER",
+        title: "CENTER",
         textStyle:  GoogleFonts.mulish(fontSize: 9, fontWeight: FontWeight.bold),
         activeColorPrimary: AppColor.primaryColor,
         inactiveColorPrimary: AppColor.textColor,

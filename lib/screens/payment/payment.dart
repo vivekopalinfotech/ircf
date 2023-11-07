@@ -146,13 +146,12 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                       borderRadius: BorderRadius.circular(60),
                                     ),
                                   )
-
                               ),
                               onPressed: (){
                                 Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(
                                     builder: (BuildContext context) {
-                                      return OnboardingScreen();
+                                      return const OnboardingScreen();
                                     },
                                   ),(_) => false,
                                 );
@@ -300,7 +299,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
           Positioned(
             bottom: 36,left: 0,right: 0,
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
+              margin: const EdgeInsets.symmetric(horizontal: 32),
               height: 60,
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
