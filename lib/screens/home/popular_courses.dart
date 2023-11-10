@@ -299,21 +299,21 @@ class _PopularCoursesState extends State<PopularCourses> {
 
   @override
   Widget build(BuildContext context) {
-    return  DefaultTabController(
-          length: 3,
-          child: Scaffold(
-              backgroundColor: AppColor.whiteBG,
-              body: BlocConsumer<CourseCategoryCubit, CourseCategoryState>(listener: (context, state) async {
-      if (state is CourseCategorySuccess) {}
-      if (state is CourseCategoryError) {}
-    }, builder: (context, state) {
-    if (state is CourseCategorySuccess) {
-      List<Tab> allTabs = [
-        const Tab(text: 'All'),
-        ...state.categoryResponse.course_category!.map((tabName) => Tab(text: tabName.cat_name)).toList(),
-      // Add your additional static tab here
-      ];
-    return Padding(
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+          backgroundColor: AppColor.whiteBG,
+          body: BlocConsumer<CourseCategoryCubit, CourseCategoryState>(listener: (context, state) async {
+            if (state is CourseCategorySuccess) {}
+            if (state is CourseCategoryError) {}
+          }, builder: (context, state) {
+            if (state is CourseCategorySuccess) {
+              List<Tab> allTabs = [
+                const Tab(text: 'All'),
+                ...state.categoryResponse.course_category!.map((tabName) => Tab(text: tabName.cat_name)).toList(),
+                // Add your additional static tab here
+              ];
+              return Padding(
                   padding: const EdgeInsets.only(
                     top: 45,
                   ),
@@ -369,21 +369,19 @@ class _PopularCoursesState extends State<PopularCourses> {
                           height: 20,
                         ),
                         TabBar(
-                          unselectedLabelColor: Colors.black,
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            color: AppColor.primaryColor,
-                          ),
-                          indicatorWeight: 0,
-
-                          isScrollable: true,
-                          indicatorColor: AppColor.secondaryColor,
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-                          padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
-                          automaticIndicatorColorAdjustment: true,
-                          unselectedLabelStyle: GoogleFonts.mulish(color: Colors.black, fontStyle: FontStyle.normal, fontSize: 13, fontWeight: FontWeight.bold),
-                          tabs: allTabs
-                        ),
+                            unselectedLabelColor: Colors.black,
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24),
+                              color: AppColor.primaryColor,
+                            ),
+                            indicatorWeight: 0,
+                            isScrollable: true,
+                            indicatorColor: AppColor.secondaryColor,
+                            labelPadding: const EdgeInsets.symmetric(horizontal: 30),
+                            padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING),
+                            automaticIndicatorColorAdjustment: true,
+                            unselectedLabelStyle: GoogleFonts.mulish(color: Colors.black, fontStyle: FontStyle.normal, fontSize: 13, fontWeight: FontWeight.bold),
+                            tabs: allTabs),
                         isShow == true
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING, vertical: 16),
@@ -399,9 +397,7 @@ class _PopularCoursesState extends State<PopularCourses> {
                                       data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                                       child: TextFormField(
                                         keyboardType: TextInputType.text,
-                                        onFieldSubmitted: (value) {
-
-                                        },
+                                        onFieldSubmitted: (value) {},
                                         controller: searchController,
                                         autofocus: false,
                                         style: GoogleFonts.montserrat(
@@ -438,16 +434,21 @@ class _PopularCoursesState extends State<PopularCourses> {
                               )
                       ],
                     ),
-                     Expanded(
+                    Expanded(
                       child: TabBarView(children: [
                         const AllListings(),
-                        ...state.categoryResponse.course_category!.map((tabName) => TabContent(tabName: tabName.cat_name.toString(),slug: tabName.slug.toString(),)).toList()
+                        ...state.categoryResponse.course_category!
+                            .map((tabName) => TabContent(
+                                  tabName: tabName.cat_name.toString(),
+                                  slug: tabName.slug.toString(),
+                                ))
+                            .toList()
                       ]),
                     )
-                  ]));}
-    return  AppConstants.LOADER;
-              })),
-        );
-
+                  ]));
+            }
+            return AppConstants.LOADER;
+          })),
+    );
   }
 }

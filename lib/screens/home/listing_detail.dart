@@ -280,7 +280,7 @@ class _ListingDetailState extends State<ListingDetail> {
             ],
           ),
         ),
-        floatingActionButton:   Container(
+        floatingActionButton: state.courseModuleResponse.course!.crs_amount.toString() == '0' ?const SizedBox(): Container(
           margin: const EdgeInsets.only(left: 48,right: 16,bottom: 20),
           height: 60,
           width: MediaQuery.of(context).size.width,

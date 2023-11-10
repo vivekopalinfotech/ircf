@@ -613,7 +613,7 @@ class _ProfileState extends State<Profile> {
           borderRadius: BorderRadius.circular(18),
           color: Colors.white,
         ),
-        padding:  EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 16),
+        padding:  const EdgeInsets.symmetric(horizontal: AppConstants.HORIZONTAL_PADDING,vertical: 16),
         child: Column(
           children: [
 
@@ -622,7 +622,7 @@ class _ProfileState extends State<Profile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset("assets/images/logo.png",height: 25,),
-                SizedBox(width: 15,),
+                const SizedBox(width: 15,),
                 Flexible(
                   child: Text("Do you want to log out from the application?", textScaleFactor: 1,
                     style: GoogleFonts.montserrat(

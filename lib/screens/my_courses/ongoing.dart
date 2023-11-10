@@ -163,7 +163,7 @@ class _OngoingState extends State<Ongoing> {
                                               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
                                               child: LinearProgressIndicator(
                                                 backgroundColor: AppColor.whiteBG,
-                                                valueColor: AlwaysStoppedAnimation<Color>(filterCat[index].color),
+                                                valueColor: const AlwaysStoppedAnimation<Color>(Colors.yellow),
                                                 value: value,
                                               ),
                                             ),
